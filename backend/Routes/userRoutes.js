@@ -1,6 +1,8 @@
 import express from 'express'
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
 import {auth} from '../DB/Config.js'
+import jwt from 'jsonwebtoken'
+
 const userRoutes = express.Router()
 
 // 👉 Registro de usuario
@@ -41,12 +43,10 @@ userRoutes.post('/login', async (req, res) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password)
     const user = userCredential.user
-    const token = await user.getIdToken()
-
+    const token = jwt.sign({uid: user.uid, email: user.email}, process.env.JWT_SECRET, {expiresIn: '2h'})
+    console.log('✅ Login exitoso')
     return res.status(200).json({
       message: '✅ Login exitoso',
-      email: user.email,
-      uid: user.uid,
       token
     })
   } catch (error) {

@@ -3,6 +3,7 @@ import {useState} from 'react'
 import {useNavigate} from 'react-router'
 import axios from 'axios'
 import endpoints from '../API/endpoints.js'
+import {authLoginError} from '../error/authError'
 
 const Login = ({setToken}) => {
   // Estado para almacenar la información de inicio de sesión
@@ -21,18 +22,16 @@ const Login = ({setToken}) => {
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    if (!validacionDatos()) {
-      return
-    }
+
     try {
       const response = await axios.post(endpoints.login, loginInfo)
       if (response.status === 200) {
-        localStorage.setItem('token', JSON.stringify(response.data.token))
+        localStorage.setItem('token', response.data.token) // Guardar el token
         setToken(response.data.token)
         navigate('/')
       }
     } catch (error) {
-      console.log(error)
+      authLoginError(error)
     }
   }
   return (
