@@ -1,21 +1,24 @@
 import {useState, useEffect} from 'react'
-import useSocket from './hooks/useServer'
+import useServer from './hooks/useServer'
 import './App.css'
 
 function App() {
-  const {arduinoData, sendArduino} = useServer() // Get the latest arduino data
-  const [displayData, setDisplayData] = useState(null)
+  const {arduinoData, setConfiguracionInicial, setNuevaConfiguracion} = useServer()
 
-  useEffect(() => {
-    if (arduinoData) {
-      setDisplayData(arduinoData)
-    }
-  }, [arduinoData]) // Runs whenever arduinoData changes
-
+  useEffect(() => {}, [arduinoData])
+  let jsonToArduino = {
+    pinSensorAgua: 1,
+    pinServo: 30,
+    pinFC28: '0',
+    pinDht: 52,
+    posicionServo: 140,
+    retardo: 5
+  }
   return (
     <div>
-      <h1>Datos del Arduino</h1>
-      <pre>{JSON.stringify(displayData, null, 2)}</pre> {/* Display received data */}
+      <h1>{JSON.stringify(arduinoData)}</h1>
+      <button onClick={() => setNuevaConfiguracion(jsonToArduino)}>Nueva Configuracion</button>{' '}
+      <button onClick={() => setConfiguracionInicial()}>Configuracion Inicial</button>
     </div>
   )
 }

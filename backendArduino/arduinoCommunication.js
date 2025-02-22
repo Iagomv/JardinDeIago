@@ -58,3 +58,9 @@ export const setConfiguracionInicial = () => {
   console.log('Estableciendo configuracion por defecto')
   sendArduino(jsonToArduino)
 }
+
+//Funcion para modificar una configuracion de pines
+export const setNuevaConfiguracion = (data) => {
+  console.log('Estableciendo nueva configuracion', data)
+  sendArduino(data)
+}

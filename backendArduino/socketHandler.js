@@ -2,15 +2,19 @@ import {Server} from 'socket.io'
 import {sendArduino} from './arduinoCommunication.js'
 import {generarDatos} from './GeneradorDatos.js'
 import {setConfiguracionInicial} from './arduinoCommunication.js'
+import {setNuevaConfiguracion} from './arduinoCommunication.js'
 let io
 let datosGenerados = null
 const serverRoom = 'servidoresRoom' // Nombre de la sala
 
 // Generar y actualizar datos cada 5 segundos
-// const updateData = () => {
-//   datosGenerados = generarDatos()
-//   actualizarServidores(datosGenerados)
-// }
+const updateData = () => {
+  let room = io.sockets.adapter.rooms.get(serverRoom)
+  if (!room || room.size === 0) return
+  if (io.sockets.adapter.rooms.get(serverRoom).size === 0) return
+  datosGenerados = generarDatos()
+  actualizarServidores(datosGenerados)
+}
 
 // Función principal que maneja las conexiones de sockets
 export const handleSockets = (server) => {
@@ -23,25 +27,19 @@ export const handleSockets = (server) => {
 
   io.on('connection', (socket) => {
     console.log(`Servidor B conectado: ${socket.id}`)
-
     // Registrar el servidor B al unirse a la sala
     socket.on('registrarServidorB', () => registrarServidorB(socket))
-
-    socket.on('configuracionArduino', (data) => sendArduino(data))
-
-    socket.on('configuracionInicial', () => {
-      console.log('Socket recibió la petición de configuración inicial')
-      setConfiguracionInicial()
-    })
+    socket.on('sendDataToArduino', (data) => sendArduino(data))
+    socket.on('configuracionInicial', () => setConfiguracionInicial())
+    socket.on('nuevaConfiguracion', (data) => setNuevaConfiguracion(data))
 
     // Recepción de datos desde Arduino
     socket.on('sendArduino', (data) => sendArduino(data))
-
     // Manejo de la desconexión
     socket.on('disconnect', () => desconexion(socket))
   })
 }
-// setInterval(updateData, 5000)
+setInterval(updateData, 10000)
 
 // Registrar servidor B (Personal)
 const registrarServidorB = (socket) => {
@@ -53,7 +51,7 @@ const registrarServidorB = (socket) => {
 
 // Enviar datos actualizados a todos los servidores B en la sala
 export const actualizarServidores = (data) => {
-  console.log('Enviando datos a la sala de servidores')
+  console.log('Enviando datos a la sala de servidores', data)
   // Emitir datos a todos los sockets que están en la sala 'servidoresRoom'
   io.to(serverRoom).emit('actualizarServidores', data)
 }

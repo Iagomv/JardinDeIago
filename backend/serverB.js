@@ -1,25 +1,24 @@
 import {createServer} from 'http'
 import express from 'express'
 import {Server} from 'socket.io'
-import {handleClientConnections} from './handleClients.js'
+import {handleClientConnections} from './conexionCliente.js'
 import {connectToServerA} from './conexionServerA.js'
 
 const app = express()
 const server = createServer(app) // Usamos createServer para mejorar compatibilidad con WebSockets
 
 const puertoServerB = 5000
-const ioServerB = new Server(server, {
+export const ioServerB = new Server(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST']
   }
 })
+// Conexión con Servidor A
+connectToServerA(ioServerB)
 
 // Manejo de clientes
 handleClientConnections(ioServerB)
-
-// Conexión con Servidor A
-connectToServerA(ioServerB)
 
 // Iniciar servidor
 server.listen(puertoServerB, () => {
