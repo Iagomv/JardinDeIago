@@ -1,25 +1,34 @@
-import {useState, useEffect} from 'react'
-import useServer from './hooks/useServer'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import {useEffect, useState} from 'react'
+import Navegador from './components/Navegador'
+import Registro from './pages/Registro'
+import {Dashboard} from './pages/Dashboard'
+import Login from './pages/Login'
+import {ServerProvider} from './context/serverContext'
 
 function App() {
-  const {arduinoData, setConfiguracionInicial, setNuevaConfiguracion} = useServer()
+  const [token, setToken] = useState(null)
 
-  useEffect(() => {}, [arduinoData])
-  let jsonToArduino = {
-    pinSensorAgua: 1,
-    pinServo: 30,
-    pinFC28: '0',
-    pinDht: 52,
-    posicionServo: 140,
-    retardo: 5
-  }
+  useEffect(() => {
+    localStorage.setItem('token', JSON.stringify(token))
+    if (token) {
+      console.log(token)
+    }
+  }, [token])
+
   return (
-    <div>
-      <h1>{JSON.stringify(arduinoData)}</h1>
-      <button onClick={() => setNuevaConfiguracion(jsonToArduino)}>Nueva Configuracion</button>{' '}
-      <button onClick={() => setConfiguracionInicial()}>Configuracion Inicial</button>
-    </div>
+    <ServerProvider>
+      <BrowserRouter>
+        <Navegador token={token} setToken={setToken} />
+        <Routes>
+          <Route path="/registro" element={<Registro />} />
+          <Route path="/login" element={<Login setToken={setToken} />} />
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
+      </BrowserRouter>
+    </ServerProvider>
   )
 }
 

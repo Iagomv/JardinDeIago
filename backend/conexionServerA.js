@@ -6,7 +6,7 @@ import {io} from 'socket.io-client'
 import {enviarDatosACliente} from './conexionCliente.js'
 import {guardarRegistrosArduino} from './DB/FireBase.js'
 import {guardarConfigArduino} from './DB/FireBase.js'
-const URL_SERVER_A = 'http://localhost:4003'
+const serverA = process.env.URL_SERVER_A
 
 const datosRecibidos = {
   humedad: 0,
@@ -30,7 +30,7 @@ let jsonToArduino = {
   retardo: 5
 }
 export const connectToServerA = (ioServerB) => {
-  socketA = io(URL_SERVER_A, {
+  socketA = io(serverA, {
     reconnection: true, // Intentará reconectar automáticamente
     reconnectionAttempts: 5, // Intentará 5 veces
     reconnectionDelay: 2000 // Esperará 2s entre intentos
@@ -76,6 +76,7 @@ const onActualizarServidores = (data) => {
   }
   enviarDatosACliente(datosRecibidos)
   guardarRegistrosArduino(datosRecibidos)
+  console.log('📩 Datos recibidos desde Servidor A ', datosRecibidos)
 }
 
 // Función para enviar datos a Arduino

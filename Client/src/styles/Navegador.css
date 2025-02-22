@@ -1,0 +1,57 @@
+/* Navegador.css */
+.navbar {
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #7b95a860 !important;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: #782cd4 !important; /* Cambiar color al pasar el ratón */
+}
+
+.navbar-nav .nav-item .nav-link.active {
+  color: #48b5e78e !important;
+  font-weight: bold;
+  transform: scale(1.1); /* Escalar el enlace activo */
+}
+
+.navbar-toggler {
+  border-color: #000000;
+}
+
+.navbar-toggler-icon {
+  background-color: #000000;
+}
+
+.minimalist {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Logout button style */
+.btn-link.minimalist {
+  font-size: 16px;
+  font-weight: 500;
+  color: #f8f9fa !important;
+  transition: color 0.3s ease;
+}
+
+.btn-link.minimalist:hover {
+  color: #782cd4 !important;
+}
+
+/* Asegúrate de que el logo tenga un buen tamaño y contraste */
+.navbar-brand {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f8f9fa !important;
+}
+
+.navbar-brand:hover {
+  color: #782cd4 !important;
+}

@@ -39,7 +39,7 @@ export const handleSockets = (server) => {
     socket.on('disconnect', () => desconexion(socket))
   })
 }
-setInterval(updateData, 10000)
+setInterval(updateData, 30000)
 
 // Registrar servidor B (Personal)
 const registrarServidorB = (socket) => {
