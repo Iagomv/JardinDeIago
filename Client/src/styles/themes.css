@@ -1,0 +1,32 @@
+:root {
+  /* Tema por defecto */
+  --bg-color: #1e3a8a;
+  --text-color: #f8f9fa;
+  --accent-color: #3b82f6;
+}
+
+/* 🌿 Jungla */
+[data-theme='jungla'] {
+  --bg-color: #2d6a4f;
+  --text-color: #f1faee;
+  --accent-color: #52b788;
+}
+
+/* 🏜️ Desierto */
+[data-theme='desierto'] {
+  --bg-color: #e9c46a;
+  --text-color: #264653;
+  --accent-color: #f4a261;
+}
+
+/* ❄️ Nieve */
+[data-theme='nieve'] {
+  --bg-color: #a8dadc;
+  --text-color: #1d3557;
+  --accent-color: #457b9d;
+}
+/* 🖌️ Aplicar las variables */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

@@ -1,33 +1,33 @@
 import React, {useEffect} from 'react'
-import {Link, useLocation} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
+import {useAuth} from '../context/authContext'
 import '../styles/Navegador.css'
 
-export const Navegador = ({token, setToken}) => {
-  const location = useLocation() // hook para obtener la ubicación actual
+export const Navegador = () => {
+  const {user, logout} = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    if (token) {
-      console.log('Token updated:', token)
+    if (user?.token) {
+      console.log('Token actualizado:', user.token)
     }
-  }, [token])
-
-  const logout = () => {
-    localStorage.removeItem('token')
-    setToken(null)
-    console.log('User logged out.')
-  }
+  }, [user])
 
   // Función para determinar si el enlace debe estar activo
   const isActive = (path) => (location.pathname.startsWith(path) ? 'active' : '')
-  //TODO Cambiar IagoMV para link jugar
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login') // Redirige al login tras cerrar sesión
+  }
+
   return (
     <div className="container">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-white py-3">
-        {/* IagoMV */}
-        <Link className="navbar-brand" to="/">
-          <strong>Kahoot Iago MV</strong>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-light p-3 rounded">
+        <Link className="navbar-brand text-black" to="/">
+          <strong>Oasis </strong>
         </Link>
-        {/* Toggler for mobile view */}
         <button
           className="navbar-toggler"
           type="button"
@@ -39,54 +39,55 @@ export const Navegador = ({token, setToken}) => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        {/* Navbar Links */}
+
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-            {/* Admin Link */}
-            {/* {token?.tipo === 'admin' && (
-              <li className="nav-item">
-                <Link className={`nav-link minimalist ${isActive('/usuarios')}`} to="/usuarios">
-                  Usuarios
-                </Link>
-              </li>
-            )} */}
-            {/* Cuestionarios Link */}
-            {/* <li className="nav-item">
-              <Link className={`nav-link minimalist ${isActive('/cuestionarios')}`} to="/cuestionarios">
-                Cuestionarios
-              </Link>
-            </li> */}
-            {/* Crear Cuestionario Link */}
-            {/* {token && (
-              <li className="nav-item">
-                <Link className={`nav-link minimalist ${isActive('/crearCuestionario')}`} to="/crearCuestionario">
-                  Crear cuestionario
-                </Link>
-              </li>
-            )} */}
-            {/* Registration/Login Links */}
-            {!token && (
+            {/* Links de Registro/Login */}
+            {!user?.token && (
               <>
                 <li className="nav-item">
-                  <Link className={`nav-link minimalist ${isActive('/registro')}`} to="/registro">
+                  <Link className={`nav-link ${isActive('/registro')}`} to="/registro">
                     Registrarse
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link minimalist ${isActive('/login')}`} to="/login">
+                  <Link className={`nav-link ${isActive('/login')}`} to="/login">
                     Login
                   </Link>
                 </li>
               </>
             )}
-            {/* Logout Button */}
-            {token && (
+            {/* Botón de Jardines */}
+            {user?.token && (
               <li className="nav-item">
                 <button
-                  className="btn btn-link minimalist text-white"
-                  style={{textDecoration: 'none'}}
-                  onClick={logout}
+                  className="btn btn-outline-dark ms-2"
+                  onClick={() => {
+                    navigate('/tienda')
+                  }}
                 >
+                  Jardines
+                </button>
+              </li>
+            )}
+            {/* Botón de Tienda */}
+            {user?.token && (
+              <li className="nav-item">
+                <button
+                  className="btn btn-outline-dark ms-2"
+                  onClick={() => {
+                    navigate('/tienda')
+                  }}
+                >
+                  Tienda
+                </button>
+              </li>
+            )}
+
+            {/* Botón de Logout */}
+            {user?.token && (
+              <li className="nav-item">
+                <button className="btn btn-outline-dark ms-2" onClick={handleLogout}>
                   Logout
                 </button>
               </li>

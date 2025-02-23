@@ -4,10 +4,12 @@ import {useNavigate} from 'react-router'
 import axios from 'axios'
 import endpoints from '../API/endpoints.js'
 import {authLoginError} from '../error/authError'
+import {useAuth} from '../context/authContext'
 
-const Login = ({setToken}) => {
+const Login = () => {
   // Estado para almacenar la información de inicio de sesión
   const navigate = useNavigate()
+  const {login} = useAuth() // Extrae la función 'login' del contexto
   const [loginInfo, setLoginInfo] = useState({
     email: '',
     password: ''
@@ -27,7 +29,7 @@ const Login = ({setToken}) => {
       const response = await axios.post(endpoints.login, loginInfo)
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token) // Guardar el token
-        setToken(response.data.token)
+        login(response.data.token)
         navigate('/')
       }
     } catch (error) {
