@@ -5,6 +5,9 @@ import cors from 'cors'
 import {handleClientConnections} from './conexionCliente.js'
 import {connectToServerA} from './conexionServerA.js'
 import userRoutes from './Routes/userRoutes.js'
+import plantasRoutes from './Routes/plantasRoutes.js'
+import articulosRoutes from './Routes/articulosRoutes.js'
+
 const app = express()
 const server = createServer(app) // Usamos createServer para mejorar compatibilidad con WebSockets
 
@@ -26,6 +29,9 @@ app.use(express.json())
 // Conexión con Servidor A
 connectToServerA(ioServerB)
 app.use('/api/users', userRoutes)
+app.use('/api/plantas', plantasRoutes)
+app.use('/api/articulos', articulosRoutes)
+
 // Manejo de clientes
 handleClientConnections(ioServerB)
 
