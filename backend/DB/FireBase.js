@@ -1,5 +1,5 @@
 import {dbFirebase} from './Config.js'
-import {query, where, collection, getDocs, addDoc, doc, setDoc, deleteDoc} from 'firebase/firestore/lite'
+import {query, where, collection, getDocs, addDoc, doc, setDoc, deleteDoc, getDoc} from 'firebase/firestore/lite'
 import {obtenerFechaActual} from '../helper/getDia.js'
 let dia = obtenerFechaActual()
 const coleccionArduino = collection(dbFirebase, 'ArduinoData')
@@ -7,6 +7,7 @@ const coleccionUsuarios = collection(dbFirebase, 'Usuarios')
 const coleccionPlantas = collection(dbFirebase, 'Plantas')
 const coleccionArticulos = collection(dbFirebase, 'Articulos')
 const coleccionJardines = collection(dbFirebase, 'Jardines')
+export const coleccionConfigRange = collection(dbFirebase, 'ConfiguracionRangos')
 
 const docDia = doc(dbFirebase, `ArduinoData/${dia}`)
 
@@ -21,6 +22,23 @@ export const guardarConfigArduino = async (data) => {
   const docConfig = doc(dbFirebase, 'ArduinoConfig', 'configuracion') // Referencia al documento único en PNIConfig con id "configuracion"
   const respuesta = await setDoc(docConfig, data, {merge: true})
   return respuesta
+}
+//Obtener los datos de Arduino a partir de la fecha
+export const getDatosArduino = async (fecha) => {
+  try {
+    const registrosRef = collection(dbFirebase, 'ArduinoData', fecha, 'registros')
+    const snapshot = await getDocs(registrosRef)
+    // Mapear los datos
+    const registros = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data()
+    }))
+
+    return registros
+  } catch (error) {
+    console.error('Error al obtener datos:', error)
+    return 0
+  }
 }
 
 const observarCambios = (coleccion) => {
@@ -179,6 +197,41 @@ export const updateJardin = async (docId, data) => {
   try {
     const jardinRef = doc(dbFirebase, 'Jardines', docId)
     const respuesta = await setDoc(jardinRef, data, {merge: true})
+    return 1
+  } catch (error) {
+    return 0
+  }
+}
+
+export const deleteJardin = async (docId) => {
+  try {
+    const jardinRef = doc(dbFirebase, 'Jardines', docId)
+    await deleteDoc(jardinRef)
+    return 1
+  } catch (error) {
+    console.error('Error al eliminar el jardin:', error.message) // Mostrar el error detallado
+    return 0
+  }
+}
+
+//👉 REGISTROS
+export const getConfig = async () => {
+  const nombreColeccion = 'ConfiguracionRangos'
+  try {
+    const userRef = doc(dbFirebase, nombreColeccion, 'doc')
+    const confDoc = await getDoc(userRef)
+    return confDoc.data()
+  } catch (error) {
+    console.log('Error obteniendo la configuración', error)
+    return 0
+  }
+}
+
+export const postConfig = async (data) => {
+  try {
+    const userRef = doc(dbFirebase, 'ConfiguracionRangos', 'doc')
+    const respuesta = await setDoc(userRef, data, {merge: true})
+    console.log('Recibiendo configuración', data)
     return 1
   } catch (error) {
     return 0

@@ -7,9 +7,11 @@ import {connectToServerA} from './conexionServerA.js'
 import userRoutes from './Routes/userRoutes.js'
 import plantasRoutes from './Routes/plantasRoutes.js'
 import articulosRoutes from './Routes/articulosRoutes.js'
+import registrosRoutes from './Routes/registrosRoutes.js'
+import configuracionRangosRoutes from './Routes/configuracionRangos.js'
 
 const app = express()
-const server = createServer(app) // Usamos createServer para mejorar compatibilidad con WebSockets
+const server = createServer(app)
 
 const puertoServerB = process.env.PUERTO
 export const ioServerB = new Server(server, {
@@ -31,6 +33,8 @@ connectToServerA(ioServerB)
 app.use('/api/users', userRoutes)
 app.use('/api/plantas', plantasRoutes)
 app.use('/api/articulos', articulosRoutes)
+app.use('/api/registros', registrosRoutes)
+app.use('/api/config', configuracionRangosRoutes)
 
 // Manejo de clientes
 handleClientConnections(ioServerB)

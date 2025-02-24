@@ -10,12 +10,12 @@ public class Interfaz extends JFrame implements ActionListener {
     private JMenuBar menuBar;
     private JMenu opciones, tamaño, icono;
     // Menús para los módulos de la aplicación
-    private JMenu plantas, servicios, clientes;
+    private JMenu plantas, registros, clientes;
 
     // Ítems del menú "Plantas"
     private JMenuItem plantasCatalogoItem, articulosItem;
     // Ítems del menú "Servicios"
-    private JMenuItem serviciosActivosItem, historicoServiciosItem, agregarServicioItem;
+    private JMenuItem registrosDiarios, configuracionRangos, agregarServicioItem;
     // Ítems del menú "Clientes"
     private JMenuItem mostrarClientes;
 
@@ -36,7 +36,7 @@ public class Interfaz extends JFrame implements ActionListener {
         setJMenuBar(menuBar);
         menuOpciones();
         menuPlantas();
-        menuServicios();
+        menuRegistros();
         menuClientes();
         // Aplicar fuente a la barra de menú
         menuBar.setFont(fuentePequeña);
@@ -59,35 +59,26 @@ public class Interfaz extends JFrame implements ActionListener {
         menuBar.add(plantas);
     }
 
-    private void menuServicios() {
-        servicios = new JMenu("Servicios");
-        aplicarFuenteGrande(servicios); // Fuente para el menú "Servicios"
+    private void menuRegistros() {
+        registros = new JMenu("Registros");
+        aplicarFuenteGrande(registros); // Fuente para el menú "Servicios"
 
-        serviciosActivosItem = new JMenuItem("Servicios activos");
-        serviciosActivosItem.addActionListener(this);
-        aplicarFuente(serviciosActivosItem);
+        registrosDiarios = new JMenuItem("Registros diarios");
+        registrosDiarios.addActionListener(this);
+        aplicarFuente(registrosDiarios);
 
-        historicoServiciosItem = new JMenuItem("Histórico de servicios");
-        historicoServiciosItem.addActionListener(this);
-        aplicarFuente(historicoServiciosItem);
+        configuracionRangos = new JMenuItem("Configuracion de rangos");
+        configuracionRangos.addActionListener(this);
+        aplicarFuente(configuracionRangos);
 
-        agregarServicioItem = new JMenuItem("Agregar servicio");
-        agregarServicioItem.addActionListener(this);
-        aplicarFuente(agregarServicioItem);
-
-        servicios.add(serviciosActivosItem);
-        servicios.add(historicoServiciosItem);
-        servicios.add(agregarServicioItem);
-        menuBar.add(servicios);
+        registros.add(registrosDiarios);
+        registros.add(configuracionRangos);
+        menuBar.add(registros);
     }
 
     private void menuClientes() {
         clientes = new JMenu("Clientes");
         aplicarFuenteGrande(clientes);
-
-        mostrarClientes = new JMenuItem("Mostrar clientes");
-        mostrarClientes.addActionListener(this);
-        aplicarFuente(mostrarClientes);
 
         mostrarClientes = new JMenuItem("Mostrar clientes");
         mostrarClientes.addActionListener(this);
@@ -173,9 +164,9 @@ public class Interfaz extends JFrame implements ActionListener {
             cambiarPanel(1); // Panel para "Plantas en catálogo"
         } else if (e.getSource() == articulosItem) {
             cambiarPanel(2); // Panel para agregar una nueva planta
-        } else if (e.getSource() == serviciosActivosItem) {
+        } else if (e.getSource() == registrosDiarios) {
             cambiarPanel(3); // Panel para "Servicios activos"
-        } else if (e.getSource() == historicoServiciosItem) {
+        } else if (e.getSource() == configuracionRangos) {
             cambiarPanel(4); // Panel para el "Histórico de servicios"
         } else if (e.getSource() == agregarServicioItem) {
             cambiarPanel(5); // Panel para agregar un servicio

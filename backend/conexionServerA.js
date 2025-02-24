@@ -8,7 +8,7 @@ import {guardarRegistrosArduino} from './DB/FireBase.js'
 import {guardarConfigArduino} from './DB/FireBase.js'
 const serverA = process.env.URL_SERVER_A
 
-const datosRecibidos = {
+export let datosRecibidos = {
   humedad: 0,
   temperatura: 0,
   temperaturaF: 0,

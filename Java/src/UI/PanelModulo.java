@@ -6,6 +6,7 @@ import javax.swing.border.MatteBorder;
 import UI.Plantas.ModuloPlanta;
 import UI.ModuloArticulo;
 import UI.ModuloCliente;
+import UI.ModuloConfigRange;
 
 // import UI.Servicios.ModuloAgregarServicio;
 
@@ -59,14 +60,14 @@ public class PanelModulo extends JPanel {
                     // Agregar nueva planta
                     panelAMostrar = new ModuloArticulo();
                     break;
-                // case 3:
-                // // Mostrar servicios activos
-                // panelAMostrar = new ModuloServicio("activos");
-                // break;
-                // case 4:
-                // // Mostrar histórico de servicios
-                // panelAMostrar = new ModuloServicio("historico");
-                // break;
+                case 3:
+                    // Mostrar servicios activos
+                    panelAMostrar = new ModuloJardin();
+                    break;
+                case 4:
+                    // Mostrar histórico de servicios
+                    panelAMostrar = new ModuloConfigRange();
+                    break;
                 // case 5:
                 // // Agregar nuevo servicio
                 // panelAMostrar = new ModuloAgregarServicio();
