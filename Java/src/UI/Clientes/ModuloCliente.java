@@ -1,7 +1,8 @@
-package UI;
+package UI.Clientes;
 
 import Manager.Consultor;
-import Models.Cliente;
+import Models.Clientes.Cliente;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -36,7 +37,9 @@ public class ModuloCliente extends JPanel {
                 return column == 11 || column == 12;
             }
         };
-
+        JButton botonNuevoCliente = new JButton("Nuevo Cliente");
+        botonNuevoCliente.addActionListener(e -> mostrarInsertarCliente());
+        add(botonNuevoCliente, BorderLayout.NORTH);
         tablaClientes = new JTable(modeloTabla);
         tablaClientes.getColumn("Editar").setCellRenderer(new ButtonRenderer());
         tablaClientes.getColumn("Editar").setCellEditor(new ButtonEditor(new JCheckBox(), "Editar"));
@@ -85,6 +88,7 @@ public class ModuloCliente extends JPanel {
 
         formularioPanel.add(botonesPanel);
         add(formularioPanel, BorderLayout.SOUTH);
+
         cargarClientes();
     }
 
@@ -122,6 +126,8 @@ public class ModuloCliente extends JPanel {
                         cliente.getEmail(), cliente.getPasswordHash(), "Editar", "Eliminar"
                 });
             }
+            revalidate();
+            repaint();
         } else {
             JOptionPane.showMessageDialog(this, "Error al obtener clientes: " + respuesta);
         }
@@ -176,6 +182,21 @@ public class ModuloCliente extends JPanel {
         for (JTextField field : fields) {
             field.setText("");
         }
+    }
+
+    // Método para mostrar el panel de creación de cliente
+    private void mostrarInsertarCliente() {
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Crear Nuevo Cliente", true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        InsertarClientePanel insertarClientePanel = new InsertarClientePanel();
+        dialog.getContentPane().add(insertarClientePanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this); // Centrar el diálogo sobre el panel
+        dialog.setVisible(true);
+
+        // Recargar clientes después de cerrar el diálogo
+        cargarClientes();
     }
 
     class ButtonRenderer extends JButton implements TableCellRenderer {

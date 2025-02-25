@@ -10,14 +10,15 @@ public class Interfaz extends JFrame implements ActionListener {
     private JMenuBar menuBar;
     private JMenu opciones, tamaño, icono;
     // Menús para los módulos de la aplicación
-    private JMenu plantas, registros, clientes;
+    private JMenu plantas, registros, clientes, empleados;
 
     // Ítems del menú "Plantas"
     private JMenuItem plantasCatalogoItem, articulosItem;
     // Ítems del menú "Servicios"
-    private JMenuItem registrosDiarios, configuracionRangos, agregarServicioItem;
+    private JMenuItem registrosDiarios, configuracionRangos;
     // Ítems del menú "Clientes"
     private JMenuItem mostrarClientes;
+    private JMenuItem mostrarEmpleados;
 
     // Ítems para opciones de ventana
     private JMenuItem tamañoPequeño, tamañoMediano, tamañoGrande, icono1, icono2, icono3;
@@ -38,6 +39,7 @@ public class Interfaz extends JFrame implements ActionListener {
         menuPlantas();
         menuRegistros();
         menuClientes();
+        menuEmpleados();
         // Aplicar fuente a la barra de menú
         menuBar.setFont(fuentePequeña);
     }
@@ -86,6 +88,18 @@ public class Interfaz extends JFrame implements ActionListener {
 
         clientes.add(mostrarClientes);
         menuBar.add(clientes);
+    }
+
+    private void menuEmpleados() {
+        empleados = new JMenu("Empleados");
+        aplicarFuenteGrande(empleados);
+
+        mostrarEmpleados = new JMenuItem("Mostrar empleados");
+        mostrarEmpleados.addActionListener(this);
+        aplicarFuente(mostrarEmpleados);
+
+        empleados.add(mostrarEmpleados);
+        menuBar.add(empleados);
     }
 
     private void menuOpciones() {
@@ -168,7 +182,7 @@ public class Interfaz extends JFrame implements ActionListener {
             cambiarPanel(3); // Panel para "Servicios activos"
         } else if (e.getSource() == configuracionRangos) {
             cambiarPanel(4); // Panel para el "Histórico de servicios"
-        } else if (e.getSource() == agregarServicioItem) {
+        } else if (e.getSource() == mostrarEmpleados) {
             cambiarPanel(5); // Panel para agregar un servicio
         } else if (e.getSource() == mostrarClientes) {
             cambiarPanel(6); // Panel para agregar un servicio

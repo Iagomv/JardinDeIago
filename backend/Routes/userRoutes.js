@@ -44,7 +44,8 @@ userRoutes.post('/update', async (req, res) => {
 userRoutes.post('/delete', async (req, res) => {
   try {
     const data = req.body
-    const resultado = deleteUsuario(data)
+    const resultado = deleteUsuario(data.id)
+    console.log('borrando cliente ', data.id)
     return resultado === 0
       ? res.status(400).json({error: 'Error al eliminar usuario'})
       : res.status(200).json({message: '✅ Usuario eliminado con éxito'})

@@ -146,6 +146,8 @@ public class ModuloPlanta extends JPanel {
                         "Eliminar"
                 });
             }
+            revalidate();
+            repaint();
         } else {
             JOptionPane.showMessageDialog(this, "Error al obtener plantas: " + respuesta);
         }

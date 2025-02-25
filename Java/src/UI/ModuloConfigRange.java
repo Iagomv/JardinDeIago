@@ -69,6 +69,8 @@ public class ModuloConfigRange extends JPanel {
             humedadMaxField.setText(String.valueOf(config.getHumedadMax()));
             aguaMinField.setText(String.valueOf(config.getAguaMin()));
             aguaMaxField.setText(String.valueOf(config.getAguaMax()));
+            revalidate();
+            repaint();
         } else {
             JOptionPane.showMessageDialog(this, "No se pudo cargar la configuración actual.");
         }

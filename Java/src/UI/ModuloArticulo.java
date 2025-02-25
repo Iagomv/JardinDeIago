@@ -129,6 +129,8 @@ public class ModuloArticulo extends JPanel {
                         "Eliminar" // Botón Eliminar
                 });
             }
+            revalidate();
+            repaint();
         } else {
             JOptionPane.showMessageDialog(this, "Error al obtener artículos: " + respuesta);
         }

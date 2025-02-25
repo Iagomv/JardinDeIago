@@ -102,7 +102,5 @@ public class ModuloJardin extends JPanel {
             lblPromedios.setText("No hay datos para la fecha indicada.");
         }
 
-        // Opcional: Aquí podrías integrar un gráfico usando JFreeChart y mostrarlo en
-        // un panel.
     }
 }

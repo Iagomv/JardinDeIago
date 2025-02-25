@@ -7,6 +7,7 @@ const coleccionUsuarios = collection(dbFirebase, 'Usuarios')
 const coleccionPlantas = collection(dbFirebase, 'Plantas')
 const coleccionArticulos = collection(dbFirebase, 'Articulos')
 const coleccionJardines = collection(dbFirebase, 'Jardines')
+const coleccionEmpleados = collection(dbFirebase, 'Empleados')
 export const coleccionConfigRange = collection(dbFirebase, 'ConfiguracionRangos')
 
 const docDia = doc(dbFirebase, `ArduinoData/${dia}`)
@@ -81,9 +82,49 @@ export const updateUsuario = async (data) => {
   }
 }
 export const deleteUsuario = async (docId) => {
+  console.log('Eliminando usuario', docId)
   try {
     const userRef = doc(dbFirebase, 'Usuarios', docId)
     await deleteDoc(userRef)
+    return 1
+  } catch (error) {
+    return 0
+  }
+}
+
+//👉 EMPLEADOS
+export const getEmpleados = async () => {
+  const docsEmpleados = await getDocs(coleccionEmpleados)
+  const empleados = []
+  docsEmpleados.forEach((doc) => {
+    empleados.push({docId: doc.id, ...doc.data()})
+  })
+  return empleados
+}
+
+export const insertarEmpleado = async (data) => {
+  try {
+    const respuesta = await addDoc(coleccionEmpleados, data)
+    return 1
+  } catch (error) {
+    return 0
+  }
+}
+
+export const updateEmpleado = async (docId, data) => {
+  try {
+    const empleadoRef = doc(dbFirebase, 'Empleados', docId)
+    const respuesta = await setDoc(empleadoRef, data, {merge: true})
+    return 1
+  } catch (error) {
+    return 0
+  }
+}
+
+export const deleteEmpleado = async (docId) => {
+  try {
+    const empleadoRef = doc(dbFirebase, 'Empleados', docId)
+    await deleteDoc(empleadoRef)
     return 1
   } catch (error) {
     return 0
