@@ -3,11 +3,12 @@ import {sendArduino} from './arduinoCommunication.js'
 import {generarDatos} from './GeneradorDatos.js'
 import {setConfiguracionInicial} from './arduinoCommunication.js'
 import {setNuevaConfiguracion} from './arduinoCommunication.js'
+import {lastArduinoData} from './arduinoCommunication.js'
 let io
 let datosGenerados = null
-const serverRoom = 'servidoresRoom' // Nombre de la sala
+export const serverRoom = 'servidoresRoom' // Nombre de la sala
 
-// Generar y actualizar datos cada 5 segundos
+// Generar y actualizar datos --> //* Funcion setInterval
 const updateData = () => {
   let room = io.sockets.adapter.rooms.get(serverRoom)
   if (!room || room.size === 0) return
@@ -39,21 +40,30 @@ export const handleSockets = (server) => {
     socket.on('disconnect', () => desconexion(socket))
   })
 }
-setInterval(updateData, 30000)
+// setInterval(updateData, 30000)
 
 // Registrar servidor B (Personal)
 const registrarServidorB = (socket) => {
   // Unir al servidor B a la sala
   socket.join(serverRoom)
   console.log(`Servidor B registrado en la sala: ${socket.id}`)
-  socket.emit('onRegistro', datosGenerados) // Enviar los datos al servidor B
+  socket.emit('onRegistro', onRegistro(socket)) // Enviar los datos al servidor B
 }
 
-// Enviar datos actualizados a todos los servidores B en la sala
+// Método que envía los datos a los servidores Se llama desde //*arduinoCommunication --> getArduinoData
 export const actualizarServidores = (data) => {
-  console.log('Enviando datos a la sala de servidores', data)
   // Emitir datos a todos los sockets que están en la sala 'servidoresRoom'
+  let room = io.sockets.adapter.rooms.get(serverRoom)
+  if (!room || room.size === 0) return
+  if (io.sockets.adapter.rooms.get(serverRoom).size === 0) return
+  console.log('Enviando datos a la sala de servidores', data)
+
   io.to(serverRoom).emit('actualizarServidores', data)
+}
+
+const onRegistro = (socket) => {
+  if (lastArduinoData !== null) return lastArduinoData
+  else return datosGenerados
 }
 
 // Manejo de la desconexión de un servidor

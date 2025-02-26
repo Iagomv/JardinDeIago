@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
-import {Alert} from 'react-native'
 import {View, Text, TextInput, Button, StyleSheet} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import {authRegisterError} from '../error/authError'
+import {ENDPOINTS} from '../api/Endpoints'
+import {axios} from 'axios'
 
 const RegisterScreen = ({setIsLoggedIn}) => {
   const [email, setEmail] = useState('')
@@ -10,8 +11,8 @@ const RegisterScreen = ({setIsLoggedIn}) => {
   const navigate = useNavigation()
 
   //Handler para registrar a un nuevo usuario tras comprobar formato y existencia de email
-  const handleRegistro = async (e) => {
-    e.preventDefault()
+  const handleRegistro = async () => {
+    console.log('Ejecutando handleRegistro...')
     // Datos del nuevo usuario
     const nuevoUsuario = {
       email,
@@ -19,7 +20,8 @@ const RegisterScreen = ({setIsLoggedIn}) => {
     }
     try {
       // Enviar los datos al servidor
-      const res = await Axios.post(endpoints.registro, nuevoUsuario)
+      const res = await axios.post(ENDPOINTS.registro, nuevoUsuario)
+      console.log(res.data)
       alert(`${res.data.message}`)
       if (res.status === 200) navigate('/login')
     } catch (error) {
@@ -48,7 +50,7 @@ const RegisterScreen = ({setIsLoggedIn}) => {
         onChangeText={setPassword}
       />
 
-      <Button title="Register" onPress={handleRegistro} />
+      <Button title="Register" onPress={() => handleRegistro} />
     </View>
   )
 }

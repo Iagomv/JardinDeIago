@@ -1,13 +1,12 @@
 import {SerialPort} from 'serialport'
 import {ReadlineParser} from 'serialport'
 import {actualizarServidores} from './socketHandler.js'
-
-const portCom = 'COM10' // En Linux o Mac
+const portCom = 'COM10' // En Linux o Mac tiene otra nomenclatura
 const port = new SerialPort({path: portCom, baudRate: 9600})
 
 // Parser para leer las líneas de datos
 const parser = port.pipe(new ReadlineParser({delimiter: '\n'}))
-
+export let lastArduinoData = null
 // Conexión con Arduino
 port.on('open', () => onOpen())
 port.on('error', (err) => console.error('Error:', err))
@@ -26,6 +25,7 @@ let jsonToArduino = {
 // Funcion que se ejecuta cuando se abre el puerto serie
 const onOpen = () => {
   console.log('Puerto serie abierto')
+  // setConfiguracionInicial()
 }
 
 // Función para enviar datos a Arduino
@@ -50,6 +50,7 @@ export const sendArduino = (data) => {
 // Función para recibir datos de Arduino
 export const getArduinoData = (data) => {
   console.log('datos recibidos de arduino', data)
+  lastArduinoData = data
   actualizarServidores(data)
 }
 

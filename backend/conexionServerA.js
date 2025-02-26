@@ -45,6 +45,7 @@ export const connectToServerA = (ioServerB) => {
 
 const onConnect = () => {
   socketA.emit('registrarServidorB')
+  setConfiguracionInicial()
   console.log('🟢 Conectado a Servidor A')
 }
 
