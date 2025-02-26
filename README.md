@@ -17,6 +17,10 @@
 - **Dependencias adicionales:**
   - **Gson** (v2.12.1) – para manejo de JSON en la aplicación Java
   - **HttpClient** (v4.5.14) – para realizar solicitudes HTTP en la aplicación Java
+- **Aplicación React Native:** npx expo install react-dom react-native-web @expo/metro-runtime (Para poder programar Web)
+  npm install @react-navigation/native (navegacion)
+  npm install react-native-screens react-native-safe-area-context
+  npm install @react-navigation/stack
 
 ---
 
