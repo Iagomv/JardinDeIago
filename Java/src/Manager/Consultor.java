@@ -12,8 +12,6 @@ public class Consultor {
 
     // Constructor que recibe la URL del endpoint
     public Consultor() {
-        // Forzamos el uso de HTTP/1.1 y usamos la dirección IP 127.0.0.1 (si es
-        // necesario)
         this.client = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();

@@ -10,6 +10,7 @@ import articulosRoutes from './Routes/articulosRoutes.js'
 import registrosRoutes from './Routes/registrosRoutes.js'
 import configuracionRangosRoutes from './Routes/configuracionRangos.js'
 import empleadosRoutes from './Routes/empleadosRoutes.js'
+import jardinesRoutes from './Routes/jardinesRoutes.js'
 
 const app = express()
 const server = createServer(app)
@@ -37,6 +38,7 @@ app.use('/api/articulos', articulosRoutes)
 app.use('/api/registros', registrosRoutes)
 app.use('/api/config', configuracionRangosRoutes)
 app.use('/api/empleados', empleadosRoutes)
+app.use('/api/jardines', jardinesRoutes)
 
 // Manejo de clientes
 handleClientConnections(ioServerB)

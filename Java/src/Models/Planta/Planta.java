@@ -11,6 +11,78 @@ public class Planta {
     public String imagen;
     public String bioma;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Humedad getHumedad() {
+        return humedad;
+    }
+
+    public void setHumedad(Humedad humedad) {
+        this.humedad = humedad;
+    }
+
+    public Temperatura getTemperatura() {
+        return temperatura;
+    }
+
+    public void setTemperatura(Temperatura temperatura) {
+        this.temperatura = temperatura;
+    }
+
+    public Calor getCalor() {
+        return calor;
+    }
+
+    public void setCalor(Calor calor) {
+        this.calor = calor;
+    }
+
+    public Agua getAgua() {
+        return agua;
+    }
+
+    public void setAgua(Agua agua) {
+        this.agua = agua;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getBioma() {
+        return bioma;
+    }
+
+    public void setBioma(String bioma) {
+        this.bioma = bioma;
+    }
+
     // Constructor
     public Planta(String id, String nombre, Humedad humedad, Temperatura temperatura,
             Calor calor, Agua agua, double precio, String imagen, String bioma) {
@@ -27,8 +99,16 @@ public class Planta {
 
     @Override
     public String toString() {
-        return "Planta [nombre=" + nombre + ", humedad=" + humedad + ", temperatura=" + temperatura + ", calor=" + calor
-                + ", agua=" + agua + ", precio=" + precio + ", imagen=" + imagen + ", bioma=" + bioma + "]";
+        return "{\n" +
+                "  \"id\": \"" + id + "\",\n" +
+                "  \"nombre\": \"" + nombre + "\",\n" +
+                "  \"humedad\": \"" + humedad + "\",\n" +
+                "  \"temperatura\": \"" + temperatura + "\",\n" +
+                "  \"calor\": \"" + calor + "\",\n" +
+                "  \"agua\": \"" + agua + "\",\n" +
+                "  \"precio\": " + precio + ",\n" +
+                "  \"imagen\": \"" + imagen + "\",\n" +
+                "  \"bioma\": \"" + bioma + "\"\n" +
+                "}";
     }
-
 }

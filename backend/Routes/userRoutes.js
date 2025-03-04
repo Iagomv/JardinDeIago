@@ -1,5 +1,5 @@
 import express from 'express'
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from 'firebase/auth'
 import {insertarUsuario, getUsuarios, updateUsuario, deleteUsuario} from '../DB/FireBase.js'
 import {auth} from '../DB/Config.js'
 import jwt from 'jsonwebtoken'
@@ -100,6 +100,25 @@ userRoutes.post('/login', async (req, res) => {
     })
   } catch (error) {
     console.log('❌ Error en login:', error.code)
+    return res.status(400).json({error: error.code})
+  }
+})
+
+// 👉 Recuperación de contraseña
+userRoutes.post('/reset-password', async (req, res) => {
+  console.log('📥 Recibiendo solicitud de recuperación de contraseña')
+  const {email} = req.body
+
+  if (!email) {
+    return res.status(400).json({error: 'El email es obligatorio'})
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email)
+    console.log('📧 Correo de recuperación enviado a:', email)
+    return res.status(200).json({message: '✅ Correo de recuperación enviado'})
+  } catch (error) {
+    console.log('❌ Error en recuperación de contraseña:', error.code)
     return res.status(400).json({error: error.code})
   }
 })

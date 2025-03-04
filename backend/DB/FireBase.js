@@ -1,7 +1,8 @@
 import {dbFirebase} from './Config.js'
 import {query, where, collection, getDocs, addDoc, doc, setDoc, deleteDoc, getDoc} from 'firebase/firestore/lite'
-import {obtenerFechaActual} from '../helper/getDia.js'
+import {obtenerFechaActual, obtenerHoraMinutoActual} from '../helper/getDia.js'
 let dia = obtenerFechaActual()
+let recordTime = 0
 const coleccionArduino = collection(dbFirebase, 'ArduinoData')
 const coleccionUsuarios = collection(dbFirebase, 'Usuarios')
 const coleccionPlantas = collection(dbFirebase, 'Plantas')
@@ -15,8 +16,14 @@ const docDia = doc(dbFirebase, `ArduinoData/${dia}`)
 //👉 ARDUINO
 export const guardarRegistrosArduino = async (data) => {
   dia = obtenerFechaActual()
-  const subColeccion = collection(docDia, 'registros')
-  const respuesta = await addDoc(subColeccion, data)
+  if (recordTime === obtenerHoraMinutoActual()) return
+  recordTime = obtenerHoraMinutoActual()
+
+  const docDia = doc(dbFirebase, `ArduinoData/${dia}`)
+  const subColeccionRegistros = collection(docDia, 'registros')
+  const subDocRef = doc(subColeccionRegistros, obtenerHoraMinutoActual()) // Usa la hora actual como ID
+
+  const respuesta = await setDoc(subDocRef, data)
   return respuesta
 }
 export const guardarConfigArduino = async (data) => {

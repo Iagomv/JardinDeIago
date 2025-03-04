@@ -3,9 +3,13 @@ package UI;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.MatteBorder;
+
+import UI.Plantas.ModuloJardines;
 import UI.Plantas.ModuloPlanta;
+import UI.Registros.ModuloConfigRange;
+import UI.Registros.ModuloDashboard;
+import UI.Registros.ModuloJardin;
 import UI.ModuloArticulo;
-import UI.ModuloConfigRange;
 import UI.Clientes.ModuloCliente;
 import UI.Empleados.ModuloEmpleado;
 
@@ -76,6 +80,14 @@ public class PanelModulo extends JPanel {
                 case 6:
                     // Mostrar clientes
                     panelAMostrar = new ModuloCliente();
+                    break;
+                case 7:
+                    // Mostrar datos en tiempo real
+                    panelAMostrar = new ModuloDashboard();
+                    break;
+                case 8:
+                    // Jardines
+                    panelAMostrar = new ModuloJardines();
                     break;
                 default:
                     JOptionPane.showMessageDialog(null, "Panel no encontrado", "Error", JOptionPane.ERROR_MESSAGE);

@@ -3,35 +3,29 @@ import {View, Text, TextInput, Button, StyleSheet} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import {authRegisterError} from '../error/authError'
 import {ENDPOINTS} from '../api/Endpoints'
-import {axios} from 'axios'
+import axios from 'axios'
 
-const RegisterScreen = ({setIsLoggedIn}) => {
+const RegisterScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigation()
+  const [passwordRepeat, setPasswordRepeat] = useState('')
+
+  const navigation = useNavigation()
 
   //Handler para registrar a un nuevo usuario tras comprobar formato y existencia de email
-  const handleRegistro = async () => {
-    console.log('Ejecutando handleRegistro...')
-    // Datos del nuevo usuario
-    const nuevoUsuario = {
-      email,
-      password
+  const handleRegistroAsync = async () => {
+    if (password !== passwordRepeat) {
+      alert('Las contraseñas no coinciden')
+      return
     }
-    try {
-      // Enviar los datos al servidor
-      const res = await axios.post(ENDPOINTS.registro, nuevoUsuario)
-      console.log(res.data)
-      alert(`${res.data.message}`)
-      if (res.status === 200) navigate('/login')
-    } catch (error) {
-      authRegisterError(error)
-    }
+
+    const nuevoUsuario = {email, password}
+    await realizarRegistroAsync(nuevoUsuario, navigation)
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.title}>Registro</Text>
 
       <TextInput
         style={styles.input}
@@ -41,7 +35,6 @@ const RegisterScreen = ({setIsLoggedIn}) => {
         value={email}
         onChangeText={setEmail}
       />
-
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -49,10 +42,41 @@ const RegisterScreen = ({setIsLoggedIn}) => {
         value={password}
         onChangeText={setPassword}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Password repeat"
+        secureTextEntry
+        value={passwordRepeat}
+        onChangeText={setPasswordRepeat}
+      />
 
-      <Button title="Register" onPress={() => handleRegistro} />
+      <Button title="Registro" onPress={handleRegistroAsync} />
     </View>
   )
+}
+
+export default RegisterScreen
+
+const realizarRegistroAsync = async (nuevoUsuario, useNavigation) => {
+  console.log('Ejecutando realizarRegistroAsync...')
+
+  try {
+    const res = await axios.post(ENDPOINTS.registro, nuevoUsuario)
+    console.log('error', res.data)
+    setTimeout(() => {
+      alert('Registro exitoso ' + nuevoUsuario.email.split('@')[0])
+    }, 100)
+
+    if (res.status === 200) {
+      setTimeout(() => navigation.navigate('Login'), 1000) // ✅ Usar `setTimeout` en lugar de `setInterval`
+    }
+  } catch (error) {
+    // setTimeout(() => {
+    //   alert(`${error.data.error}`)
+    // }, 100)
+    console.log(error.response)
+    authRegisterError(error)
+  }
 }
 
 const styles = StyleSheet.create({
@@ -69,10 +93,11 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   input: {
-    width: '100%', // Ensures it takes full width on mobile
-    maxWidth: 400, // Prevents it from getting too wide on web
+    width: '100%',
+    maxWidth: 400,
     height: 50,
     borderWidth: 1,
+    textAlign: 'center',
     borderColor: '#ccc',
     borderRadius: 8,
     paddingHorizontal: 10,
@@ -80,5 +105,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   }
 })
-
-export default RegisterScreen

@@ -13,9 +13,9 @@ public class Interfaz extends JFrame implements ActionListener {
     private JMenu plantas, registros, clientes, empleados;
 
     // Ítems del menú "Plantas"
-    private JMenuItem plantasCatalogoItem, articulosItem;
-    // Ítems del menú "Servicios"
-    private JMenuItem registrosDiarios, configuracionRangos;
+    private JMenuItem plantasCatalogoItem, articulosItem, jardines;
+    // Ítems del menú "Registros"
+    private JMenuItem registrosDiarios, configuracionRangos, tiempoReal;
     // Ítems del menú "Clientes"
     private JMenuItem mostrarClientes;
     private JMenuItem mostrarEmpleados;
@@ -56,8 +56,13 @@ public class Interfaz extends JFrame implements ActionListener {
         articulosItem.addActionListener(this);
         aplicarFuente(articulosItem);
 
+        jardines = new JMenuItem("Jardines");
+        jardines.addActionListener(this);
+        aplicarFuente(jardines);
+
         plantas.add(plantasCatalogoItem);
         plantas.add(articulosItem);
+        plantas.add(jardines);
         menuBar.add(plantas);
     }
 
@@ -73,8 +78,14 @@ public class Interfaz extends JFrame implements ActionListener {
         configuracionRangos.addActionListener(this);
         aplicarFuente(configuracionRangos);
 
+        tiempoReal = new JMenuItem("Datos en tiempo real");
+        tiempoReal.addActionListener(this);
+        aplicarFuente(tiempoReal);
+
         registros.add(registrosDiarios);
         registros.add(configuracionRangos);
+        registros.add(tiempoReal);
+
         menuBar.add(registros);
     }
 
@@ -179,13 +190,17 @@ public class Interfaz extends JFrame implements ActionListener {
         } else if (e.getSource() == articulosItem) {
             cambiarPanel(2); // Panel para agregar una nueva planta
         } else if (e.getSource() == registrosDiarios) {
-            cambiarPanel(3); // Panel para "Servicios activos"
+            cambiarPanel(3); // Panel para ver registro de datos
         } else if (e.getSource() == configuracionRangos) {
             cambiarPanel(4); // Panel para el "Histórico de servicios"
         } else if (e.getSource() == mostrarEmpleados) {
-            cambiarPanel(5); // Panel para agregar un servicio
+            cambiarPanel(5); // Panel para gestionar empleados
         } else if (e.getSource() == mostrarClientes) {
-            cambiarPanel(6); // Panel para agregar un servicio
+            cambiarPanel(6); // Panel para gestionar clientes
+        } else if (e.getSource() == tiempoReal) {
+            cambiarPanel(7); // Panel para ver datos en tiempo real
+        } else if (e.getSource() == jardines) {
+            cambiarPanel(8); // Panel para gestionar jardines
         } else if (e.getSource() == icono1) {
             añadirIcono(1);
         } else if (e.getSource() == icono2) {
