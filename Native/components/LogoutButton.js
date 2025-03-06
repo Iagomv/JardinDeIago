@@ -1,11 +1,12 @@
 import React from 'react'
 import {View, Alert, Button} from 'react-native'
-//TODO MODIFICAR ESTADO LOGGEDIN PARA PRODUCCION
+import {useUserContext} from '../context/UserContext'
 
-export const LogoutButton = ({setIsLoggedIn}) => {
+export const LogoutButton = () => {
+  const {logout} = useUserContext()
   const onButtonPress = () => {
     alert('Logout')
-    setIsLoggedIn(true)
+    logout()
   }
   return (
     <View style={{marginRight: 15}}>

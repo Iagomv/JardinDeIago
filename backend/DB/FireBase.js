@@ -66,6 +66,12 @@ export const getUsuarios = async () => {
   })
   return usuarios
 }
+export const getUsuarioPorEmail = async (email) => {
+  const userRef = doc(dbFirebase, 'Usuarios', email)
+  const userDoc = await getDoc(userRef)
+  const response = userDoc.exists() && userDoc.data() ? userDoc.data() : 0
+  return response
+}
 export const insertarUsuario = async (data) => {
   const insertData = {
     ...data,

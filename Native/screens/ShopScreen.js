@@ -1,12 +1,12 @@
+import {StyleSheet, View, Text} from 'react-native'
 import React, {useEffect, useState} from 'react'
-import {View, Text, ScrollView, StyleSheet} from 'react-native'
 import axios from 'axios'
 import {ENDPOINTS} from '../api/Endpoints'
+import GardensShop from '../components/gardens/shop/GardensShop'
+import {ScrollView} from 'react-native-web'
 import {useUserContext} from '../context/UserContext'
 
-import MyGardens from '../components/gardens/myGardens/MyGardens'
-
-const ProfileScreen = () => {
+const ShopScreen = () => {
   const [gardensData, setGardensData] = useState([])
   const {userInfo, isLoggedIn} = useUserContext()
 
@@ -27,31 +27,21 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <MyGardens gardensData={gardensData} />
+      <ScrollView>
+        <GardensShop gardensData={gardensData} />
       </ScrollView>
     </View>
   )
 }
 
-export default ProfileScreen
+export default ShopScreen
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Ensures View takes up full screen
-    backgroundColor: '#f4f4f4', // Light gray background
-    padding: 15
+    flex: 1,
+    padding: 10
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center',
-    marginVertical: 10
-  },
-  scrollContainer: {
-    flexGrow: 1, // Allows the ScrollView to grow and be scrollable
-    paddingBottom: 20 // Prevents content from getting cut off at the bottom
+  list: {
+    paddingBottom: 20
   }
 })

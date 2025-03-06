@@ -1,6 +1,6 @@
 import express from 'express'
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from 'firebase/auth'
-import {insertarUsuario, getUsuarios, updateUsuario, deleteUsuario} from '../DB/FireBase.js'
+import {insertarUsuario, getUsuarioPorEmail, getUsuarios, updateUsuario, deleteUsuario} from '../DB/FireBase.js'
 import {auth} from '../DB/Config.js'
 import jwt from 'jsonwebtoken'
 
@@ -8,12 +8,22 @@ const userRoutes = express.Router()
 
 // 👉 CRUD
 //Obtener usuarios
+
 userRoutes.get('/get', async (req, res) => {
   try {
     const usuarios = await getUsuarios()
     res.status(200).json(usuarios)
   } catch (error) {
     res.status(400).json({error: 'Error al obtener usuarios'})
+  }
+})
+userRoutes.get('/get/:email', async (req, res) => {
+  console.log(req.params.email)
+  try {
+    const usuario = await getUsuarioPorEmail(req.params.email)
+    return usuario === 0 ? res.status(400).json({error: 'Error al obtener usuario'}) : res.status(200).json(usuario)
+  } catch (error) {
+    res.status(400).json({error: 'Error al obtener usuario'})
   }
 })
 //Insertar nuevo usuario
@@ -93,10 +103,12 @@ userRoutes.post('/login', async (req, res) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password)
     const user = userCredential.user
     const token = jwt.sign({uid: user.uid, email: user.email}, process.env.JWT_SECRET, {expiresIn: '2h'})
+    const firebaseUserData = await getUsuarioPorEmail(email)
     console.log('✅ Login exitoso')
     return res.status(200).json({
       message: '✅ Login exitoso',
-      token
+      token,
+      userInfo: firebaseUserData
     })
   } catch (error) {
     console.log('❌ Error en login:', error.code)

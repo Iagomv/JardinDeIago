@@ -4,22 +4,19 @@ import {useNavigation} from '@react-navigation/native'
 import {ENDPOINTS} from '../api/Endpoints'
 import axios from 'axios'
 import {myAlert} from '../error/myAlert'
+import {useUserContext} from '../context/UserContext'
 
-const LoginScreen = ({setIsLoggedIn}) => {
+const LoginScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigation = useNavigation()
-
-  if (!setIsLoggedIn) {
-    console.warn('Falta el prop setIsLoggedIn')
-  }
+  const {login, setIsLoggedIn} = useUserContext()
 
   // Handler para el login
   const handleLoginAsync = async () => {
     if (!validateInfoLogin(email, password)) return
-
     const usuario = {email, password}
-    await realizarLoginAsync(usuario, setIsLoggedIn, navigation)
+    await realizarLoginAsync(usuario, login, navigation)
   }
 
   // Handler para resetear la contraseña
@@ -65,22 +62,19 @@ const LoginScreen = ({setIsLoggedIn}) => {
 
 export default LoginScreen
 
-const realizarLoginAsync = async (usuario, setIsLoggedIn, navigation) => {
-  console.log('Ejecutando realizarLoginAsync...')
+const realizarLoginAsync = async (usuario, login, navigation) => {
+  console.log('🔄 Ejecutando realizarLoginAsync...')
   try {
     const res = await axios.post(ENDPOINTS.login, usuario)
-
-    console.log('Respuesta del servidor:', res.data)
-
-    myAlert('Success', 'Login exitoso!')
+    console.log('✅ Login response:', res.data) // Log the response
 
     if (res.status === 200) {
-      setIsLoggedIn?.(false)
+      const {userInfo} = res.data
+      login(userInfo)
       navigation.navigate('Home')
     }
   } catch (error) {
-    console.error('Error en la solicitud de Login:', error)
-    alert('Error en el login', 'Credenciales incorrectas o algún error en la conexión.')
+    console.error('❌ Error en login:', error)
   }
 }
 

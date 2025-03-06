@@ -1,4 +1,5 @@
-import React from 'react'
+// src/navigation/AppNavigator.js
+import React, {useEffect} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createStackNavigator} from '@react-navigation/stack'
@@ -8,26 +9,21 @@ import LoginScreen from '../screens/LoginScreen'
 import RegisterScreen from '../screens/RegisterScreen'
 import {LogoutButton} from '../components/LogoutButton'
 import HistoryScreen from '../screens/HistoryScreen'
+import ShopScreen from '../screens/ShopScreen'
+import {useUserContext} from '../context/UserContext' // Importa el hook
 
 // Crear los navegadores
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
-// Componente de navegación principal
-const AppNavigator = ({isLoggedIn, setIsLoggedIn}) => {
+const AppNavigator = () => {
+  const {isLoggedIn, setIsLoggedIn, userInfo, login, logout} = useUserContext() // Usar el contexto
+  useEffect(() => {
+    console.log('📢 userInfo changed:', userInfo) // Now logs only when userInfo updates
+  }, [userInfo])
   return (
     <NavigationContainer>
       {isLoggedIn ? (
-        // Si no está logueado, se usan las pantallas de Login y Registro
-        <Stack.Navigator>
-          <Stack.Screen name="Login">
-            {(props) => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
-          </Stack.Screen>
-          <Stack.Screen name="Registro">
-            {(props) => <RegisterScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
-          </Stack.Screen>
-        </Stack.Navigator>
-      ) : (
         // Si está logueado, mostrar la navegación de Tabs
         <Tab.Navigator
           screenOptions={{
@@ -38,24 +34,41 @@ const AppNavigator = ({isLoggedIn, setIsLoggedIn}) => {
             name="Home"
             component={HomeScreen}
             options={{
-              headerRight: () => <LogoutButton setIsLoggedIn={setIsLoggedIn} />
+              headerRight: () => <LogoutButton />
             }}
           />
           <Tab.Screen
             name="Perfil"
             component={ProfileScreen}
             options={{
-              headerRight: () => <LogoutButton setIsLoggedIn={setIsLoggedIn} />
+              headerRight: () => <LogoutButton />
             }}
           />
           <Tab.Screen
             name="Historico"
             component={HistoryScreen}
             options={{
-              headerRight: () => <LogoutButton setIsLoggedIn={setIsLoggedIn} />
+              headerRight: () => <LogoutButton />
+            }}
+          />
+          <Tab.Screen
+            name="Tienda"
+            component={ShopScreen}
+            options={{
+              headerRight: () => <LogoutButton />
             }}
           />
         </Tab.Navigator>
+      ) : (
+        // Si no está logueado, se usan las pantallas de Login y Registro
+        <Stack.Navigator>
+          <Stack.Screen name="Login">
+            {(props) => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} login={login} />}
+          </Stack.Screen>
+          <Stack.Screen name="Registro">
+            {(props) => <RegisterScreen {...props} setIsLoggedIn={setIsLoggedIn} login={login} />}
+          </Stack.Screen>
+        </Stack.Navigator>
       )}
     </NavigationContainer>
   )

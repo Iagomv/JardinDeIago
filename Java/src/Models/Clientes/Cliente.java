@@ -10,14 +10,14 @@ public class Cliente {
     private String passwordUpdatedAt;
     private String lastLoginAt;
     private String validSince;
-    private List<Integer> jardines;
+    private List<String> jardines;
     private String lastRefreshAt;
     private String localId;
     private String email;
     private String passwordHash;
 
     public Cliente(String id, String createdAt, boolean emailVerified, String passwordUpdatedAt, String lastLoginAt,
-            String validSince, List<Integer> jardines, String lastRefreshAt, String localId, String email,
+            String validSince, List<String> jardines, String lastRefreshAt, String localId, String email,
             String passwordHash) {
         this.id = id;
         this.createdAt = createdAt;
@@ -81,21 +81,22 @@ public class Cliente {
         this.validSince = validSince;
     }
 
-    public List<Integer> getJardines() {
+    public List<String> getJardines() {
         return jardines;
     }
 
-    public void setJardines(List<Integer> jardines) {
+    public void setJardines(List<String> jardines) {
         this.jardines = jardines;
     }
 
-    public void addJardin(int jardinId) {
-        if (!jardines.contains(jardinId))
-            jardines.add(jardinId);
+    public void addJardin(String biomaJardin) {
+
+        if (!jardines.contains(biomaJardin))
+            jardines.add(biomaJardin);
     }
 
-    public void removeJardin(int jardinId) {
-        jardines.remove(Integer.valueOf(jardinId));
+    public void removeJardin(String biomaJardin) {
+        jardines.remove((biomaJardin));
     }
 
     public String getLastRefreshAt() {

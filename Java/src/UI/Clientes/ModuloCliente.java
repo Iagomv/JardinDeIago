@@ -70,7 +70,7 @@ public class ModuloCliente extends JPanel {
         addFormField("Password Updated At:", passwordUpdatedAtField, 2, row++);
         addFormField("Last Login At:", lastLoginAtField, 0, row);
         addFormField("Valid Since:", validSinceField, 2, row++);
-        addFormField("Jardines (IDs separados por comas):", jardinesField, 0, row++);
+        addFormField("Jardines (Biomas separados por comas):", jardinesField, 0, row++);
         addFormField("Last Refresh At:", lastRefreshAtField, 0, row);
         addFormField("Local ID:", localIdField, 2, row++);
         addFormField("Email:", emailField, 0, row);
@@ -133,6 +133,20 @@ public class ModuloCliente extends JPanel {
         }
     }
 
+    private Boolean isValidGarden(String text) {
+        List<String> biomasValidos = Arrays.asList("bosque", "desierto", "artico", "jungla");
+        String[] tempSplit = text.trim().split(",");
+
+        // Check if each trimmed value is a valid biome
+        for (String s : tempSplit) {
+            if (!biomasValidos.contains(s.trim().toLowerCase())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private void agregarOActualizarCliente(ActionEvent e) {
         try {
             String id = idField.getText();
@@ -142,13 +156,13 @@ public class ModuloCliente extends JPanel {
             String lastLoginAt = lastLoginAtField.getText();
             String validSince = validSinceField.getText();
             String jardinesText = jardinesField.getText();
-            List<Integer> jardines = new ArrayList<>();
+            List<String> jardines = new ArrayList<>();
             if (!jardinesText.isEmpty()) {
                 Arrays.stream(jardinesText.split(","))
                         .map(String::trim)
-                        .mapToInt(Integer::parseInt)
                         .forEach(jardines::add);
             }
+
             String lastRefreshAt = lastRefreshAtField.getText();
             String localId = localIdField.getText();
             String email = emailField.getText();
@@ -162,8 +176,13 @@ public class ModuloCliente extends JPanel {
             String json = gson.toJson(cliente);
 
             if (!id.isEmpty()) {
-                consultor.post("users/update", json);
-                JOptionPane.showMessageDialog(this, "Cliente actualizado exitosamente.");
+                if (!isValidGarden(jardinesText) && !jardinesText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Los biomas ingresados no son validos.");
+                } else {
+                    consultor.post("users/update", json);
+                    JOptionPane.showMessageDialog(this, "Cliente actualizado exitosamente.");
+                }
+
             } else {
                 consultor.post("users/post", json);
                 JOptionPane.showMessageDialog(this, "Cliente agregado exitosamente.");
@@ -263,6 +282,7 @@ public class ModuloCliente extends JPanel {
                 JOptionPane.showMessageDialog(null, "Cliente eliminado.");
             }
         }
+
     }
 
     class IdWrapper {
