@@ -3,7 +3,7 @@ import http from 'http'
 import cors from 'cors'
 import {handleSockets} from './socketHandler.js'
 
-const puerto = 4003
+const puerto = 6179
 const app = express()
 const server = http.createServer(app)
 

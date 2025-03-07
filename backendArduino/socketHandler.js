@@ -1,9 +1,13 @@
 import {Server} from 'socket.io'
-import {sendArduino} from './arduinoCommunication.js'
 import {generarDatos} from './GeneradorDatos.js'
-import {setConfiguracionInicial} from './arduinoCommunication.js'
-import {setNuevaConfiguracion} from './arduinoCommunication.js'
-import {lastArduinoData} from './arduinoCommunication.js'
+import {
+  sendArduino,
+  lastArduinoData,
+  moverServo,
+  changeDelay,
+  setNuevaConfiguracion,
+  setConfiguracionInicial
+} from './arduinoCommunication.js'
 let io
 let datosGenerados = null
 export const serverRoom = 'servidoresRoom' // Nombre de la sala
@@ -33,14 +37,15 @@ export const handleSockets = (server) => {
     socket.on('sendDataToArduino', (data) => sendArduino(data))
     socket.on('configuracionInicial', () => setConfiguracionInicial())
     socket.on('nuevaConfiguracion', (data) => setNuevaConfiguracion(data))
-
+    socket.on('moverServo', (data) => onMoverServo(socket, data))
+    socket.on('changeDelay', (data) => changeDelay(data))
     // Recepción de datos desde Arduino
     socket.on('sendArduino', (data) => sendArduino(data))
     // Manejo de la desconexión
     socket.on('disconnect', () => desconexion(socket))
   })
 }
-if (lastArduinoData === null) setInterval(updateData, 30000)
+// if (lastArduinoData === null) setInterval(updateData, 30000)
 
 // Registrar servidor B (Personal)
 const registrarServidorB = (socket) => {
@@ -70,4 +75,9 @@ const onRegistro = (socket) => {
 const desconexion = (socket) => {
   socket.leave(serverRoom) // Dejar la sala al desconectarse
   console.log(`Servidor personal desconectado y eliminado de la sala: ${socket.id}`)
+}
+
+const onMoverServo = (socket, data) => {
+  socket.emit('moverServo', data)
+  moverServo(data)
 }

@@ -1,7 +1,7 @@
 import {SerialPort} from 'serialport'
 import {ReadlineParser} from 'serialport'
 import {actualizarServidores} from './socketHandler.js'
-const portCom = 'COM10' // En Linux o Mac tiene otra nomenclatura
+const portCom = '/dev/ttyACM1' // En Linux o Mac tiene otra nomenclatura
 const port = new SerialPort({path: portCom, baudRate: 9600})
 
 // Parser para leer las líneas de datos
@@ -64,4 +64,15 @@ export const setConfiguracionInicial = () => {
 export const setNuevaConfiguracion = (data) => {
   console.log('Estableciendo nueva configuracion', data)
   sendArduino(data)
+}
+export const moverServo = (nuevaPosServo) => {
+  console.log('Moviendo servo', nuevaPosServo)
+  jsonToArduino.posicionServo = nuevaPosServo
+  sendArduino(jsonToArduino)
+}
+
+export const changeDelay = (newDelay) => {
+  console.log('changeDelay', newDelay)
+  jsonToArduino.retardo = newDelay
+  sendArduino(jsonToArduino)
 }
