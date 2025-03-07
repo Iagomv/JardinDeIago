@@ -14,25 +14,27 @@ const SingleChart = ({data, tipo, rangoTiempo}) => {
     console.log(rangoTiempo)
     console.log(rangoTiempo + 1 - 1)
 
-    switch (rangoTiempo + 1 - 1) {
+    switch (parseInt(rangoTiempo)) {
       case 0: // Últimos 15 minutos
         filteredData = data.filter((item) => parseInt(item.id, 10) > actualTimeInMinutes - 15)
         console.log('case0')
 
         break
-      case 10: // Última hora
+      case 1: // Última hora
         console.log('case1')
         filteredData = data.filter((item) => parseInt(item.id, 10) > actualTimeInMinutes - 60)
 
         break
-      case 20: // Últimas 6 horas
+      case 2: // Últimas 6 horas
         filteredData = data.filter((item) => parseInt(item.id, 10) > actualTimeInMinutes - 360)
         console.log('case2')
 
         break
-      case 30: // Todo el día
+      case 3: // Todo el día
         filteredData = data // Suponiendo que todo el dataset es relevante para el "día".
         break
+      default:
+        filteredData = data
     }
 
     return filteredData

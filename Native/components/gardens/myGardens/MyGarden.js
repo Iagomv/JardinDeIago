@@ -3,16 +3,27 @@ import React from 'react'
 import {dam2Running} from '../../../api/Endpoints'
 import MyPlantCard from './MyPlantCard'
 import useShoppingActions from '../../../Shop/useShoppingActions'
+import GardenRangeConfiguration from './GardenRangeConfiguration'
 
-const MyGarden = ({gardensData, gardenData}) => {
+const MyGarden = ({gardensData, gardenData, setGardensData}) => {
   if (!gardenData || !gardenData.plantasJardin) {
     return <Text style={styles.noData}>No hay plantas en este jardín.</Text>
   }
 
   const firstPlant = Object.values(gardenData.plantasJardin)[0]
   const plantList = Object.values(gardenData.plantasJardin)
-  const [showPlants, setShowPlants] = React.useState(true)
+  const [showPlants, setShowPlants] = React.useState(false)
+  const [showConfig, setShowConfig] = React.useState(false)
 
+  const showPlantList = () => {
+    setShowPlants(!showPlants)
+    setShowConfig(false)
+  }
+
+  const showConfigList = () => {
+    setShowConfig(!showConfig)
+    setShowPlants(false)
+  }
   return (
     <View style={styles.container}>
       {/* Card del Jardín */}
@@ -28,19 +39,30 @@ const MyGarden = ({gardensData, gardenData}) => {
         <View style={styles.row}>
           <Text style={styles.title}>{gardenData.bioma || 'Jardín'}</Text>
 
-          <Pressable style={styles.button} onPress={() => setShowPlants(!showPlants)}>
-            <Text style={styles.buttonText}>{showPlants ? 'Ocultar' : '+Info'}</Text>
+          <Pressable style={styles.button} onPress={() => showPlantList()}>
+            <Text style={styles.buttonText}>{showPlants ? 'Ocultar plantas' : '+Info'}</Text>
+          </Pressable>
+
+          <Pressable style={styles.button} onPress={() => showConfigList()}>
+            <Text style={styles.buttonText}>{showConfig ? 'Ocultar rangos' : 'Configurar rangos'}</Text>
           </Pressable>
         </View>
       </View>
-
+      {showConfig && <GardenRangeConfiguration gardenData={gardenData} />}
       {/* Lista de plantas */}
       {showPlants && (
         <FlatList
           data={plantList}
           horizontal={true}
           keyExtractor={(item, index) => item.id || index.toString()}
-          renderItem={({item}) => <MyPlantCard gardensData={gardensData} gardenData={gardenData} plantData={item} />}
+          renderItem={({item}) => (
+            <MyPlantCard
+              gardensData={gardensData}
+              gardenData={gardenData}
+              plantData={item}
+              setGardensData={setGardensData}
+            />
+          )}
           contentContainerStyle={styles.list}
         />
       )}

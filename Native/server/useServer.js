@@ -1,12 +1,12 @@
 import {useState, useEffect} from 'react'
 import {io} from 'socket.io-client'
-import {SOCKET_LOCALHOST_SERVERB} from '../api/Endpoints'
+import {SOCKET_IP_SERVERB} from '../api/Endpoints'
 const useServer = () => {
   const [arduinoData, setArduinoData] = useState(null)
   const [clientSocket, setClientSocket] = useState(null)
 
   useEffect(() => {
-    const socket = io(SOCKET_LOCALHOST_SERVERB, {
+    const socket = io(SOCKET_IP_SERVERB, {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 2000

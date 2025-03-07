@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {ENDPOINTS} from '../api/Endpoints'
 import GardensShop from '../components/gardens/shop/GardensShop'
-import {ScrollView} from 'react-native-web'
+import {ScrollView} from 'react-native'
 import {useUserContext} from '../context/UserContext'
 
 const ShopScreen = () => {

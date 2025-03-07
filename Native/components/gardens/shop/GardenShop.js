@@ -11,7 +11,7 @@ const GardenShop = ({gardenData}) => {
 
   const firstPlant = Object.values(gardenData.plantasJardin)[0]
   const plantList = Object.values(gardenData.plantasJardin)
-  const [showPlants, setShowPlants] = React.useState(true)
+  const [showPlants, setShowPlants] = React.useState(false)
   const {gardenPurchase} = useShoppingActions()
   return (
     <View style={styles.container}>

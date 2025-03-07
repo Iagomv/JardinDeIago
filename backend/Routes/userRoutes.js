@@ -43,6 +43,7 @@ userRoutes.post('/update', async (req, res) => {
   try {
     const data = req.body
     const resultado = updateUsuario(data)
+    console.log('actualizando usuario ', req.body)
     return resultado === 0
       ? res.status(400).json({error: 'Error al actualizar usuario'})
       : res.status(200).json({message: '✅ Usuario actualizado con éxito'})

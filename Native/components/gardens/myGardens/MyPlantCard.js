@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react'
 import {View, StyleSheet} from 'react-native'
 import {Card, Title, Paragraph, Button} from 'react-native-paper'
 import useShoppingActions from '../../../Shop/useShoppingActions'
-const MyPlantCard = ({plantData, gardenData, gardensData}) => {
+import {myConfirm} from '../../../error/myConfirm'
+
+const MyPlantCard = ({plantData, gardenData, gardensData, setGardensData}) => {
   const [planta, setPlanta] = useState({})
   const [cantidad, setCantidad] = useState('')
   const {plantPurchase} = useShoppingActions()
@@ -13,8 +15,11 @@ const MyPlantCard = ({plantData, gardenData, gardensData}) => {
   }, [])
 
   const pressComprar = () => {
-    plantPurchase(gardensData, gardenData, plantData)
-    setCantidad(cantidad + 1)
+    const onConfirm = () => {
+      plantPurchase(gardensData, gardenData, plantData, setGardensData)
+      setCantidad(cantidad + 1)
+    }
+    myConfirm('¿Desea comprar esta planta?', onConfirm, () => {})
   }
   return (
     <View style={styles.container}>
@@ -32,11 +37,11 @@ const MyPlantCard = ({plantData, gardenData, gardensData}) => {
             <Paragraph>
               💧 Humedad: {planta.humedad.min}% - {planta.humedad.max}%
             </Paragraph>
-            <Paragraph>💲 Precio: ${planta.precio}</Paragraph>
+            <Paragraph>💲 Precio: {planta.precio}€</Paragraph>
             <Paragraph> Cantidad: {cantidad}</Paragraph>
           </Card.Content>
           <Card.Actions>
-            <Button mode="contained" onPress={() => plantPurchase(gardensData, gardenData, plantData)}>
+            <Button mode="contained" onPress={() => pressComprar(gardensData, gardenData, plantData)}>
               Comprar
             </Button>
           </Card.Actions>
@@ -59,6 +64,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
+    padding: 10,
     borderRadius: 10,
     overflow: 'hidden'
   }

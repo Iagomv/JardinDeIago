@@ -3,8 +3,8 @@ import {StyleSheet, Text, View, FlatList, Pressable} from 'react-native'
 import MyGarden from './MyGarden'
 import {useUserContext} from '../../../context/UserContext'
 
-const MyGardens = ({gardensData}) => {
-  const [showGardens, setShowGardens] = useState(false)
+const MyGardens = ({gardensData, setGardensData}) => {
+  // const [showGardens, setShowGardens] = useState(false)
   const {userInfo, setUserInfo} = useUserContext()
   const [_, forceUpdate] = useState(0)
   useEffect(() => {
@@ -14,19 +14,17 @@ const MyGardens = ({gardensData}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mis jardines</Text>
-
-      {/* Botón para mostrar/ocultar jardines */}
+      {/* Botón para mostrar/ocultar jardines
       <Pressable style={styles.button} onPress={() => setShowGardens(!showGardens)}>
-        <Text style={styles.buttonText}>{showGardens ? 'Ocultar jardines' : 'Adquirir jardines'}</Text>
-      </Pressable>
-
-      {showGardens && (
-        <FlatList
-          data={gardensData.filter((garden) => userInfo.jardines.includes(garden.bioma))}
-          keyExtractor={(item, index) => item.id || index.toString()}
-          renderItem={({item}) => <MyGarden gardensData={gardensData} gardenData={item} />}
-        />
-      )}
+        <Text style={styles.buttonText}>{showGardens ? 'Ocultar jardines' : 'Mostrar jardines'}</Text>
+      </Pressable> */}
+      <FlatList
+        data={gardensData.filter((garden) => userInfo.jardines.includes(garden.bioma))}
+        keyExtractor={(item, index) => item.id || index.toString()}
+        renderItem={({item}) => (
+          <MyGarden gardensData={gardensData} gardenData={item} setGardensData={setGardensData} />
+        )}
+      />
     </View>
   )
 }

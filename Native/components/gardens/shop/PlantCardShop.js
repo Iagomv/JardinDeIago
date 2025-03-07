@@ -31,13 +31,6 @@ const PlantCardShop = ({plantData}) => {
             <Paragraph>💲 Precio: ${planta.precio}</Paragraph>
             <Paragraph> Cantidad: {cantidad}</Paragraph>
           </Card.Content>
-
-          {/* Botón de acción
-          <Card.Actions>
-            <Button mode="contained" onPress={() => console.log(`Detalles de ${planta.nombre}`)}>
-              Ver más
-            </Button>
-          </Card.Actions> */}
         </Card>
       )}
     </View>

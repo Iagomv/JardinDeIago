@@ -17,9 +17,9 @@ const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
 const AppNavigator = () => {
-  const {isLoggedIn, setIsLoggedIn, userInfo, login, logout} = useUserContext() // Usar el contexto
+  const {isLoggedIn, setIsLoggedIn, userInfo, login, logout} = useUserContext()
   useEffect(() => {
-    console.log('📢 userInfo changed:', userInfo) // Now logs only when userInfo updates
+    console.log('📢 userInfo changed:', userInfo)
   }, [userInfo])
   return (
     <NavigationContainer>

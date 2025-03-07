@@ -56,6 +56,10 @@ const LoginScreen = () => {
       <TouchableOpacity style={styles.button} onPress={handleResetPasswordAsync}>
         <Text style={styles.buttonText}>Recuperar contraseña</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Registro')}>
+        <Text style={styles.buttonText}>Crear cuenta</Text>
+      </TouchableOpacity>
     </View>
   )
 }

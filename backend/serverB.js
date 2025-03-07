@@ -24,9 +24,9 @@ export const ioServerB = new Server(server, {
 })
 app.use(
   cors({
-    origin: '*', // Permite el origen específico
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    credentials: true // Si necesitas enviar cookies o cabeceras de autenticación
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
   })
 )
 app.use(express.json())

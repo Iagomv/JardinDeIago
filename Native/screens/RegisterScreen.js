@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, Text, TextInput, Button, StyleSheet} from 'react-native'
+import {View, Text, TextInput, Button, StyleSheet, TouchableOpacity} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import {authRegisterError} from '../error/authError'
 import {ENDPOINTS} from '../api/Endpoints'
@@ -49,8 +49,12 @@ const RegisterScreen = () => {
         value={passwordRepeat}
         onChangeText={setPasswordRepeat}
       />
-
-      <Button title="Registro" onPress={handleRegistroAsync} />
+      <TouchableOpacity style={styles.button} onPress={handleRegistroAsync}>
+        <Text style={styles.buttonText}>Confirmar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Ir a login</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -103,5 +107,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 15,
     backgroundColor: '#fff'
+  },
+  button: {
+    width: '100%',
+    maxWidth: 200,
+    backgroundColor: '#007bff', // Color del botón
+    paddingVertical: 15,
+    borderRadius: 8,
+    marginBottom: 15,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonText: {
+    color: '#fff', // Color del texto
+    fontSize: 16,
+    fontWeight: 'bold'
   }
 })

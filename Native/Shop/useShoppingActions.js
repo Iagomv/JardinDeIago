@@ -16,7 +16,6 @@ const useShoppingActions = () => {
 
   const plantPurchase = async (gardens, garden, plant) => {
     try {
-      // ✅ Find the garden index
       const gardenIndex = gardens.findIndex((g) => g.id === garden.id)
       if (gardenIndex === -1) {
         console.error('❌ Garden not found in gardens list!', gardens, garden)
@@ -27,7 +26,6 @@ const useShoppingActions = () => {
 
       console.log('🟡 Checking garden:', updatedGardens[gardenIndex])
 
-      // ✅ Access plantasJardin (which is an object, not an array)
       const plantasJardin = updatedGardens[gardenIndex].plantasJardin
 
       // ✅ Check if plant exists using plant.id as the key in plantasJardin

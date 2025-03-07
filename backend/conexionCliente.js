@@ -14,6 +14,7 @@ export const handleClientConnections = (ioServerB) => {
     socket.on('sendDataToArduino', (data) => sendDataToArduino(data))
     socket.on('nuevaConfiguracion', (data) => setNuevaConfiguracion(data))
     socket.on('disconnect', (socket) => desconectarCliente(socket))
+    socket.on('regarJardin', (socket) => wateringPlants(socket))
   })
 }
 
@@ -26,6 +27,9 @@ const desconectarCliente = (socket) => {
   console.log(`🔴 Cliente desconectado: ${socket.id}`)
 }
 
+const wateringPlants = (socket) => {
+  console.log('Server recieved the order to water plants')
+}
 // Utilizamos la funcion en conexionServerA cuando llegan nuevos datos desde Arduino
 export const enviarDatosACliente = (data) => {
   ioServerB.to(clientesRoom).emit('datosActualizados', data) // Enviar a clientes conectados

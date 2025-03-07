@@ -29,7 +29,7 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Profile Screen</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <MyGardens gardensData={gardensData} />
+        <MyGardens gardensData={gardensData} setGardensData={setGardensData} />
       </ScrollView>
     </View>
   )

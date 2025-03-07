@@ -31,7 +31,7 @@ export const guardarConfigArduino = async (data) => {
   const respuesta = await setDoc(docConfig, data, {merge: true})
   return respuesta
 }
-//Obtener los datos de Arduino a partir de la fecha
+//Obtener los datos de Arduino a partir de la fecha //TODO .every() -> Value==='nan' -> 0
 export const getDatosArduino = async (fecha) => {
   try {
     const registrosRef = collection(dbFirebase, 'ArduinoData', fecha, 'registros')
@@ -281,10 +281,31 @@ export const getConfig = async () => {
   }
 }
 
+export const getGardenConfig = async (bioma) => {
+  const nombreColeccion = 'ConfiguracionRangos'
+  try {
+    const gardenConfigRef = doc(dbFirebase, nombreColeccion, bioma)
+    const confDoc = await getDoc(gardenConfigRef)
+    return confDoc.data()
+  } catch (error) {
+    console.log('Error obteniendo la configuración', error)
+    return 0
+  }
+}
 export const postConfig = async (data) => {
   try {
-    const userRef = doc(dbFirebase, 'ConfiguracionRangos', 'doc')
-    const respuesta = await setDoc(userRef, data, {merge: true})
+    const docRef = doc(dbFirebase, 'ConfiguracionRangos', 'doc')
+    const respuesta = await setDoc(docRef, data, {merge: true})
+    console.log('Recibiendo configuración', data)
+    return 1
+  } catch (error) {
+    return 0
+  }
+}
+export const postGardenConfig = async (data, bioma) => {
+  try {
+    const gardenConfigDoc = doc(dbFirebase, 'ConfiguracionRangos', bioma)
+    const respuesta = await setDoc(gardenConfigDoc, data, {merge: true})
     console.log('Recibiendo configuración', data)
     return 1
   } catch (error) {

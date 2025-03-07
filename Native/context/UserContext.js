@@ -1,5 +1,8 @@
 // src/context/UserContext.js
 import React, {createContext, useState, useContext, useEffect} from 'react'
+import {ENDPOINTS} from '../api/Endpoints'
+import axios from 'axios'
+import {myAlert} from '../error/myAlert'
 
 // Crear el contexto
 const UserContext = createContext()
@@ -22,8 +25,18 @@ export const UserProvider = ({children}) => {
     setUserInfo(null) // Limpiamos la información del usuario al cerrar sesión
   }
 
+  const updateUserInfo = async () => {
+    try {
+      console.log('Actualizando información del usuario...', userInfo)
+      const res = await axios.post(ENDPOINTS.updateUserInfo, userInfo)
+      if (res.status !== 200) myAlert('Error', res.data.error)
+      return res
+    } catch (error) {
+      myAlert('Error', error.message)
+    }
+  }
   return (
-    <UserContext.Provider value={{isLoggedIn, setIsLoggedIn, setUserInfo, userInfo, login, logout}}>
+    <UserContext.Provider value={{isLoggedIn, setIsLoggedIn, setUserInfo, updateUserInfo, userInfo, login, logout}}>
       {children}
     </UserContext.Provider>
   )
