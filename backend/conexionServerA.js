@@ -46,11 +46,15 @@ export const connectToServerA = (ioServerB) => {
 const onConnect = () => {
   socketA.emit('registrarServidorB')
   setConfiguracionInicial()
+  socketA.emit('moverServo', 180)
+  socketA.emit('changeDelay', 15)
+  socketA.on('moverServo', (data) => console.log('mensaje recibido de ServerA moverServo', data))
   console.log('🟢 Conectado a Servidor A')
 }
 
 // Función para manejar los datos recibidos de Servidor A
 const onActualizarServidores = (data) => {
+  console.log(data)
   if (data.dato1 == null) {
     let cleanData = data.substring(0, data.length - 1).split(',')
 
@@ -76,7 +80,7 @@ const onActualizarServidores = (data) => {
     datosRecibidos.retardo = data.dato9
   }
   enviarDatosACliente(datosRecibidos)
-  guardarRegistrosArduino(datosRecibidos)
+  // guardarRegistrosArduino(datosRecibidos)
   console.log('📩 Datos recibidos desde Servidor A ', datosRecibidos)
 }
 
