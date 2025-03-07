@@ -55,6 +55,11 @@ const onConnect = () => {
 // Función para manejar los datos recibidos de Servidor A
 const onActualizarServidores = (data) => {
   console.log(data)
+  if (Object.values(data).some((v) => v === undefined)) {
+    console.error('Error: Hay valores undefined en el objeto.')
+    return
+  }
+
   if (data.dato1 == null) {
     let cleanData = data.substring(0, data.length - 1).split(',')
 
@@ -80,7 +85,7 @@ const onActualizarServidores = (data) => {
     datosRecibidos.retardo = data.dato9
   }
   enviarDatosACliente(datosRecibidos)
-  // guardarRegistrosArduino(datosRecibidos)
+  guardarRegistrosArduino(datosRecibidos)
   console.log('📩 Datos recibidos desde Servidor A ', datosRecibidos)
 }
 
@@ -101,4 +106,15 @@ export const setNuevaConfiguracion = (data) => {
   console.log('Cliente estableciendo nueva configuracion', data)
   socketA.emit('nuevaConfiguracion', data)
   guardarConfigArduino(data)
+}
+
+// Funciones para emitir cambios en posicion del servo o retardo de envio de datos
+export const newServoPosition = (newServoPosition) => {
+  if (parseInt(newServoPosition) === NaN) return
+  socketA.emit('moverServo', newServoPosition)
+}
+
+export const changeDataDelay = (newDelay) => {
+  if (parseInt(newDelay) === NaN) return
+  socketA.emit('changeDelay', newDelay)
 }

@@ -15,6 +15,11 @@ const docDia = doc(dbFirebase, `ArduinoData/${dia}`)
 
 //👉 ARDUINO
 export const guardarRegistrosArduino = async (data) => {
+  if (Object.values(data).some((v) => v === undefined)) {
+    console.error('Error: Hay valores undefined en el objeto.', data)
+    return
+  }
+
   dia = obtenerFechaActual()
   if (recordTime === obtenerHoraMinutoActual()) return
   recordTime = obtenerHoraMinutoActual()
