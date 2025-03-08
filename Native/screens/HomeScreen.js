@@ -20,77 +20,82 @@ const HomeScreen = () => {
     labels: ['10:00', '10:05', '10:10'],
     data: [20, 40, 60]
   }
-  const timeLabel = new Date().toLocaleTimeString().slice(0, 5)
 
   useEffect(() => {
     if (arduinoData) {
       const timeLabel = new Date().toLocaleTimeString().slice(0, 5)
 
+      const sanitizeValue = (value) => (typeof value === 'number' ? value : 0)
+
       setChartData((prevData) => ({
         humedad: {
-          labels: [...prevData.humedad.labels, timeLabel].slice(-3), // Solo los últimos 3
-          data: [...prevData.humedad.data, arduinoData.humedad].slice(-3)
+          labels: [...prevData.humedad.labels, timeLabel].slice(-3),
+          data: [...prevData.humedad.data, sanitizeValue(arduinoData.humedad)].slice(-3)
         },
         temperatura: {
           labels: [...prevData.temperatura.labels, timeLabel].slice(-3),
-          data: [...prevData.temperatura.data, arduinoData.temperatura].slice(-3)
+          data: [...prevData.temperatura.data, sanitizeValue(arduinoData.temperatura)].slice(-3)
         },
         temperaturaF: {
           labels: [...prevData.temperaturaF.labels, timeLabel].slice(-3),
-          data: [...prevData.temperaturaF.data, arduinoData.temperaturaF].slice(-3)
+          data: [...prevData.temperaturaF.data, sanitizeValue(arduinoData.temperaturaF)].slice(-3)
         },
         calorF: {
           labels: [...prevData.calorF.labels, timeLabel].slice(-3),
-          data: [...prevData.calorF.data, arduinoData.calorF].slice(-3)
+          data: [...prevData.calorF.data, sanitizeValue(arduinoData.calorF)].slice(-3)
         },
         calor: {
           labels: [...prevData.calor.labels, timeLabel].slice(-3),
-          data: [...prevData.calor.data, arduinoData.calor].slice(-3)
+          data: [...prevData.calor.data, sanitizeValue(arduinoData.calor)].slice(-3)
         },
         agua: {
           labels: [...prevData.agua.labels, timeLabel].slice(-3),
-          data: [...prevData.agua.data, arduinoData.agua].slice(-3)
+          data: [...prevData.agua.data, sanitizeValue(arduinoData.agua)].slice(-3)
         }
       }))
     }
   }, [arduinoData])
 
-  const renderChart = (title, data, color) => (
-    <View style={styles.chartContainer}>
-      <Text style={styles.chartTitle}>{title}</Text>
-      <LineChart
-        data={{
-          labels: data.labels.length ? data.labels : dummyData.labels,
-          datasets: [
-            {
-              data: data.data.length ? data.data : dummyData.data,
-              color: (opacity = 1) => color(opacity),
-              strokeWidth: 2
+  const renderChart = (title, data, color) => {
+    const safeData = data.data.some((val) => typeof val === 'number' && !isNaN(val)) ? data.data : dummyData.data
+
+    return (
+      <View style={styles.chartContainer}>
+        <Text style={styles.chartTitle}>{title}</Text>
+        <LineChart
+          data={{
+            labels: data.labels.length ? data.labels : dummyData.labels,
+            datasets: [
+              {
+                data: safeData,
+                color: (opacity = 1) => color(opacity),
+                strokeWidth: 2
+              }
+            ]
+          }}
+          width={screenWidth / 2 - 30}
+          height={220}
+          chartConfig={{
+            backgroundColor: '#ffffff',
+            backgroundGradientFrom: '#f0f0f0',
+            backgroundGradientTo: '#ffffff',
+            decimalPlaces: 2,
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            style: {
+              borderRadius: 16
+            },
+            propsForDots: {
+              r: '6',
+              strokeWidth: '2',
+              stroke: '#ffa726'
             }
-          ]
-        }}
-        width={screenWidth / 2 - 30}
-        height={220}
-        chartConfig={{
-          backgroundColor: '#ffffff',
-          backgroundGradientFrom: '#f0f0f0',
-          backgroundGradientTo: '#ffffff',
-          decimalPlaces: 2,
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16
-          },
-          propsForDots: {
-            r: '6',
-            strokeWidth: '2',
-            stroke: '#ffa726'
-          }
-        }}
-        bezier
-      />
-    </View>
-  )
+          }}
+          bezier
+        />
+      </View>
+    )
+  }
 
   return (
     <ScrollView style={styles.container}>
