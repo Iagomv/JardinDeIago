@@ -10,7 +10,7 @@ public class CustomPlantaRenderer extends JLabel implements ListCellRenderer<Pla
     @Override
     public Component getListCellRendererComponent(JList<? extends Planta> list, Planta value, int index,
             boolean isSelected, boolean cellHasFocus) {
-        setText(value.getNombre()); // Only show the nombre
+        setText(value.getNombre()); 
         if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());

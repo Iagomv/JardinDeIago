@@ -2,9 +2,11 @@
   "dependencies": {
     "axios": "^1.8.1",
     "cors": "^2.8.5",
+    "cron": "^4.1.0",
     "dotenv": "^16.4.7",
+    "expo-server-sdk": "^3.14.0",
     "express": "^4.21.2",
-    "firebase": "^11.3.1",
+    "firebase": "^11.4.0",
     "jsonwebtoken": "^9.0.2",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"

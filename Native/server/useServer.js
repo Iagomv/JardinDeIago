@@ -1,60 +1,84 @@
-import {useState, useEffect} from 'react'
-import {io} from 'socket.io-client'
-import {SOCKET_IP_SERVERB} from '../api/Endpoints'
+import { useState, useEffect } from 'react'
+import { io } from 'socket.io-client'
+import { SOCKET_IP_SERVERB } from '../api/Endpoints'
+import { useUserContext } from '../context/UserContext'
+import { myAlert } from '../error/myAlert'
+
 const useServer = () => {
-  const [arduinoData, setArduinoData] = useState(null)
-  const [clientSocket, setClientSocket] = useState(null)
+	const [arduinoData, setArduinoData] = useState(null)
+	const [clientSocket, setClientSocket] = useState(null)
+	const { userInfo } = useUserContext()
+	const [serverUserInfo, setServerUserInfo] = useState(null)
+	useEffect(() => {
+		const socket = io(SOCKET_IP_SERVERB, {
+			reconnection: true,
+			reconnectionAttempts: 5,
+			reconnectionDelay: 2000,
+		})
 
-  useEffect(() => {
-    const socket = io(SOCKET_IP_SERVERB, {
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 2000
-    })
+		socket.on('connect', () => {
+			console.log('🟢 Conectado al servidor')
+			socket.emit('registrarServidorB')
+		})
 
-    socket.on('connect', () => {
-      console.log('🟢 Conectado al servidor')
-      socket.emit('registrarServidorB')
-    })
+		socket.on('datosActualizados', (data) => {
+			const nonUndefinedData = Object.fromEntries(
+				Object.entries(data).map(([key, value]) => [key, value === undefined ? 0 : value])
+			)
+			setArduinoData(nonUndefinedData)
+			console.log('📩 Datos recibidos:', nonUndefinedData)
+		})
 
-    socket.on('datosActualizados', (data) => {
-      setArduinoData(data)
-      console.log('📩 Datos recibidos:', data)
-    })
+		socket.on('disconnect', () => {
+			console.log('🔴 Desconectado del servidor. Intentando reconectar...')
+		})
 
-    socket.on('disconnect', () => {
-      console.log('🔴 Desconectado del servidor. Intentando reconectar...')
-    })
+		socket.on('alert', (data) => {
+			myAlert('Error', JSON.stringify(data))
+		})
 
-    setClientSocket(socket)
+		setClientSocket(socket)
 
-    // ✅ Limpiar conexión al desmontar el componente
-    return () => {
-      socket.disconnect()
-    }
-  }, [])
+		return () => {
+			socket.disconnect()
+		}
+	}, [])
 
-  const sendArduino = (data) => {
-    if (clientSocket) {
-      clientSocket.emit('enviarArduino', data)
-    }
-  }
+	useEffect(() => {
+		if (clientSocket && serverUserInfo) {
+			console.log('🔄 Enviando usuario actualizado:', serverUserInfo)
+			clientSocket.emit('loggedUserInfo', serverUserInfo)
+		}
+	}, [serverUserInfo, clientSocket])
 
-  const setConfiguracionInicial = () => {
-    if (clientSocket) {
-      console.log('Configuración Inicial')
-      clientSocket.emit('configuracionInicial')
-    }
-  }
+	const sendArduino = (data) => {
+		if (clientSocket) {
+			clientSocket.emit('enviarArduino', data)
+		}
+	}
 
-  const setNuevaConfiguracion = (data) => {
-    if (clientSocket) {
-      console.log('Nueva configuración')
-      clientSocket.emit('nuevaConfiguracion', data)
-    }
-  }
+	const setConfiguracionInicial = () => {
+		if (clientSocket) {
+			console.log('Configuración Inicial')
+			clientSocket.emit('configuracionInicial')
+		}
+	}
 
-  return {arduinoData, sendArduino, setConfiguracionInicial, setNuevaConfiguracion}
+	const setNuevaConfiguracion = (data) => {
+		if (clientSocket) {
+			console.log('Nueva configuración')
+			clientSocket.emit('nuevaConfiguracion', data)
+		}
+	}
+
+	const sendLoggedUserInfo = (data = null) => {
+		console.log('🔄 Enviando usuario actualizado:', data)
+		data === null
+			? setServerUserInfo(userInfo) // ✅ This triggers the useEffect automatically
+			: setServerUserInfo(data)
+	}
+
+	return { arduinoData, sendArduino, setConfiguracionInicial, setNuevaConfiguracion, sendLoggedUserInfo }
 }
 
 export default useServer
