@@ -78,7 +78,13 @@ const useServer = () => {
 			: setServerUserInfo(data)
 	}
 
-	return { arduinoData, sendArduino, setConfiguracionInicial, setNuevaConfiguracion, sendLoggedUserInfo }
+	const regarJardin = () => {
+		if (clientSocket) {
+			console.log('Regando Jardín')
+			clientSocket.emit('regarJardin')
+		}
+	}
+	return { arduinoData, sendArduino, setConfiguracionInicial, setNuevaConfiguracion, sendLoggedUserInfo, regarJardin }
 }
 
 export default useServer

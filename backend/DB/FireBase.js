@@ -3,7 +3,6 @@ import { query, where, collection, getDocs, addDoc, doc, setDoc, deleteDoc, getD
 import { obtenerFechaActual, obtenerHoraMinutoActual } from '../helper/getDia.js'
 import { modifyRegisterToBiomaData } from '../helper/modifyRegisterToBiomaData.js'
 import { checkLoggedUsersRanges } from '../helper/notificationHelper.js'
-import { initialDataParser } from '../helper/initialDataParser.js'
 let dia = obtenerFechaActual()
 let recordTime = 0
 const coleccionArduino = collection(dbFirebase, 'ArduinoData')

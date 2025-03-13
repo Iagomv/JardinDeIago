@@ -9,6 +9,7 @@ public class Consultor {
 
     private final HttpClient client;
     private final String urlBase = "http://localhost:5000/api/";
+    // private final String urlBase = "http://dam2.colexio-karbo.com:6257/api/";
 
     // Constructor que recibe la URL del endpoint
     public Consultor() {

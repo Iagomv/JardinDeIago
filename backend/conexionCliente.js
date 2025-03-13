@@ -10,7 +10,7 @@ import {
 	newServoPosition,
 	changeDataDelay,
 } from './conexionServerA.js'
-import { ioServerB } from './serverB.js'
+import { ioServerB } from './serverIndividualIMV.js'
 
 export const handleClientConnections = (ioServerB) => {
 	ioServerB.on('connection', (socket) => {

@@ -47,8 +47,6 @@ export const connectToServerA = (ioServerB) => {
 const onConnect = () => {
 	socketA.emit('registrarServidorB')
 	setConfiguracionInicial()
-	socketA.emit('moverServo', 180)
-	socketA.emit('changeDelay', 15)
 	socketA.on('moverServo', (data) => console.log('mensaje recibido de ServerA moverServo', data))
 	console.log('🟢 Conectado a Servidor A')
 }
@@ -56,10 +54,6 @@ const onConnect = () => {
 // Función para manejar los datos recibidos de Servidor A
 const onActualizarServidores = (data) => {
 	console.log(data)
-	if (Object.values(data).some((v) => v === undefined)) {
-		console.error('Error: Hay valores undefined en el objeto.')
-		return
-	}
 
 	if (data.dato1 == null) {
 		let cleanData = data.substring(0, data.length - 1).split(',')
@@ -86,10 +80,14 @@ const onActualizarServidores = (data) => {
 		datosRecibidos.retardo = data.dato9
 	}
 	const normalizedData = initialDataParser(datosRecibidos)
-
-	enviarDatosACliente(normalizedData)
-	guardarRegistrosArduino(normalizedData)
-	console.log('📩 Datos recibidos desde Servidor A ', datosRecibidos)
+	if (Object.values(normalizedData).some((v) => v === undefined || isNaN(v))) {
+		console.error('Error: Hay valores undefined en el objeto.')
+		return
+	} else {
+		enviarDatosACliente(normalizedData)
+		guardarRegistrosArduino(normalizedData)
+		console.log('📩 Datos recibidos desde Servidor A ', datosRecibidos)
+	}
 }
 
 // Función para enviar datos a Arduino
